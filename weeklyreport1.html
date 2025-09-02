@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TemanBizz Dashboard - SFA-DMS Weekly Project Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Updated color scheme per visual guidelines */
+            --color-primary: #0891b2;
+            --color-primary-light: #e0f2fe;
+            --color-on-track: #16a34a;
+            --color-on-track-light: #dcfce7;
+            --color-at-risk: #d97706;
+            --color-at-risk-light: #fef3c7;
+            --color-off-track: #dc2626;
+            --color-off-track-light: #fee2e2;
+            --color-done: #0d9488;
+            --color-done-light: #ccfbf1;
+            --color-text: #1e293b;
+            --color-text-light: #64748b;
+            --color-border: #e2e8f0;
+            --color-background: #ffffff;
+            --color-background-alt: #f8fafc;
+            --color-section-title: #0f172a;
+            
+            /* Severity colors */
+            --color-severity-high: #dc2626;
+            --color-severity-medium: #d97706;
+            --color-severity-low: #16a34a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+            color: var(--color-text);
+            line-height: 1.5;
+            background-color: #f1f5f9;
+            font-size: 16px;
+        }
+        
+        /* Print optimization for A4 */
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                font-size: 12pt;
+            }
+            
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .header {
+                position: static;
+                box-shadow: none;
+            }
+            
+            .section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 1.5cm;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Grid system */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+        
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .md\:grid-cols-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--color-background);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between; /* Memastikan konten header terpisah ke kiri dan kanan */
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .project-logo {
+            width: 4rem; /* Ukuran lebih besar dari sebelumnya (3rem) */
+            height: 4rem; /* Menjaga aspek rasio dengan width yang sama */
+            object-fit: contain; /* Memastikan gambar tetap proporsional */
+            margin-right: 1rem; /* Sedikit lebih besar untuk keseimbangan dengan ukuran baru */
+        }
+        
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-left: auto; /* Memastikan header-meta selalu di kanan */
+        }
+        
+        .period {
+            font-weight: 500;
+            color: var(--color-text-light);
+        }
+        
+        .last-updated {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+        
+        .export-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        
+        .export-btn:hover {
+            background-color: #0e7490;
+        }
+        
+        /* Traffic Light Status */
+        .status-indicator {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        .status-on-track {
+            background-color: var(--color-on-track);
+            box-shadow: 0 0 0 4px var(--color-on-track-light);
+        }
+        
+        .status-at-risk {
+            background-color: var(--color-at-risk);
+            box-shadow: 0 0 0 4px var(--color-at-risk-light);
+        }
+        
+        .status-off-track {
+            background-color: var(--color-off-track);
+            box-shadow: 0 0 0 4px var(--color-off-track-light);
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        .section {
+            background-color: var(--color-background);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--color-section-title);
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 0.75rem;
+            display: inline-block;
+        }
+        
+        /* Executive Summary */
+        .executive-summary {
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .summary-text {
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        /* KPI Tiles */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .kpi-tile {
+            background-color: var(--color-background);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .kpi-status {
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .kpi-status-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+        }
+        
+        .kpi-status-dot.on-track {
+            background-color: var(--color-on-track);
+        }
+        
+        .kpi-status-dot.at-risk {
+            background-color: var(--color-at-risk);
+        }
+        
+        .kpi-status-dot.off-track {
+            background-color: var(--color-off-track);
+        }
+        
+        .kpi-tile::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+        
+        .kpi-tile.on-track::after {
+            background-color: var(--color-on-track);
+        }
+        
+        .kpi-tile.at-risk::after {
+            background-color: var(--color-at-risk);
+        }
+        
+        .kpi-tile.off-track::after {
+            background-color: var(--color-off-track);
+        }
+        
+        /* Progress & Highlights */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .highlight-card {
+            background-color: var(--color-background);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border-left: 5px solid var(--color-primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .highlight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .highlight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, transparent 50%, var(--color-primary-light) 50%);
+            border-radius: 0 0 0 100%;
+            opacity: 0.6;
+        }
+        
+        .highlight-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .highlight-title::before {
+            content: '•';
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        
+        .highlight-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .highlight-content p {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        
+        .highlight-content strong {
+            color: var(--color-text);
+            background-color: rgba(8, 145, 178, 0.1);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+        
+        .highlight-content ul {
+            padding-left: 1.5rem;
+            margin-top: 0.75rem;
+            list-style-type: none;
+        }
+        
+        .highlight-content li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .highlight-content li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+        
+        .impact-statement {
+            font-weight: 500;
+            color: var(--color-text);
+            border-left: 3px solid var(--color-primary);
+            padding-left: 0.75rem;
+            margin: 1rem 0;
+            background-color: var(--color-primary-light);
+            padding: 0.5rem 0.75rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        /* Timeline & Task Tracking */
+        .timeline-container {
+            margin-bottom: 2rem;
+        }
+        
+        .milestone-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .milestone-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--color-border);
+            border-radius: 2px;
+        }
+        
+        .milestone {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .milestone-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: var(--color-border);
+            margin-bottom: 0.5rem;
+            z-index: 2;
+        }
+        
+        .milestone.completed .milestone-dot {
+            background-color: var(--color-on-track);
+        }
+        
+        .milestone.current .milestone-dot {
+            background-color: var(--color-primary);
+            box-shadow: 0 0 0 4px var(--color-primary-light);
+        }
+        
+        .milestone.future .milestone-dot {
+            background-color: var(--color-border);
+        }
+        
+        .milestone-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+            max-width: 120px;
+        }
+        
+        .milestone-date {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+        
+        .task-table-container {
+            overflow-x: auto;
+        }
+        
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        
+        .task-table th {
+            background-color: var(--color-background-alt);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--color-text);
+            border-bottom: 2px solid var(--color-border);
+        }
+        
+        .task-table th button {
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: var(--color-text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0;
+            font-size: 0.875rem;
+        }
+        
+        .task-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+        
+        .task-table tr:hover {
+            background-color: var(--color-background-alt);
+        }
+        
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .status-chip.done {
+            background-color: var(--color-on-track-light);
+            color: var(--color-on-track);
+        }
+        
+        .status-chip.in-progress {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+        }
+        
+        .status-chip.not-started {
+            background-color: var(--color-border);
+            color: var(--color-text-light);
+        }
+        
+        .status-chip.at-risk {
+            background-color: var(--color-at-risk-light);
+            color: var(--color-at-risk);
+        }
+        
+        .status-chip.blocked {
+            background-color: var(--color-off-track-light);
+            color: var(--color-off-track);
+        }
+        
+        /* Risks Section */
+        .risks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .risk-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            background-color: var(--color-background-alt);
+            border-left: 4px solid var(--color-at-risk);
+        }
+        
+        .risk-severity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .risk-severity.high {
+            background-color: var(--color-severity-high-light);
+            color: var(--color-severity-high);
+            border: 2px solid var(--color-severity-high);
+        }
+        
+        .risk-severity.medium {
+            background-color: var(--color-severity-medium-light);
+            color: var(--color-severity-medium);
+            border: 2px solid var(--color-severity-medium);
+        }
+        
+        .risk-severity.low {
+            background-color: var(--color-severity-low-light);
+            color: var(--color-severity-low);
+            border: 2px solid var(--color-severity-low);
+        }
+        
+        .risk-content {
+            flex: 1;
+        }
+        
+        .risk-title {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .risk-mitigation {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed var(--color-border);
+        }
+        
+        /* Next Steps Section */
+        .next-steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .next-steps-category {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-primary);
+        }
+        
+        .next-step-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .next-step-checkbox {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--color-border);
+            border-radius: 0.25rem;
+            flex-shrink: 0;
+        }
+        
+        .next-step-content {
+            flex: 1;
+        }
+        
+        .next-step-title {
+            font-weight: 500;
+        }
+        
+        .executive-ask {
+            background-color: var(--color-primary-light);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--color-primary);
+        }
+        
+        .executive-ask-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+        }
+        
+        /* References & Attachments */
+        .references-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .reference-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background-color: var(--color-background-alt);
+            border-radius: 0.5rem;
+        }
+        
+        .reference-icon {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .reference-content {
+            flex: 1;
+        }
+        
+        .reference-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .reference-description {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+        
+        .reference-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--color-background);
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--color-border);
+            margin-top: 2rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+        
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        /* Additional color variables for severity */
+        :root {
+            --color-severity-high-light: rgba(220, 38, 38, 0.1);
+            --color-severity-medium-light: rgba(217, 119, 6, 0.1);
+            --color-severity-low-light: rgba(22, 163, 74, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-title">
+                    <img src="assets/images/project-logo.png" alt="Project Logo" class="project-logo" aria-label="Project logo">
+                    <div>
+                        <div>Pengembangan Aplikasi SFA-DMS dengan MileApp</div>
+                        <div class="period">19 Agustus - 02 September 2025</div>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <div class="last-updated">Last updated: 02 September 2025</div>
+                    <button class="export-btn no-print" onclick="window.print()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Export PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+        <div class="container">
+            <!-- Executive Summary Section -->
+            <section class="section" aria-labelledby="executive-summary-title">
+                <h2 id="executive-summary-title" class="section-title">Executive Summary</h2>
+                
+                <div class="executive-summary">
+                    <div class="summary-text">
+                        Project berada pada status  <strong>at risk</strong> karena estimasi dari vendor belum disampaikan tepat waktu dan finalisasi kontrak masih dalam proses. Perhatian segera dari SteerCo diperlukan apabila kontrak dan estimasi tidak diselesaikan pada minggu ini.
+                    </div>
+                </div>
+                
+                <div class="kpi-container">
+                    <div class="kpi-tile on-track">
+                        <div class="kpi-title">BRD Completion</div>
+                        <div class="kpi-value">100%</div>
+                        <div class="kpi-status">
+                            <span class="kpi-status-dot on-track"></span>
+                            Completed on 25 Aug
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-tile at-risk">
+                        <div class="kpi-title">Vendor Estimation</div>
+                        <div class="kpi-value">In Progress</div>
+                        <div class="kpi-status">
+                            <span class="kpi-status-dot at-risk"></span>
+                            Due 29 Aug, still pending
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-tile at-risk">
+                        <div class="kpi-title">Integration Readiness</div>
+                        <div class="kpi-value">X%*</div>
+                        <div class="kpi-status">
+                            <span class="kpi-status-dot at-risk"></span>
+                            All integration in progress
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-tile at-risk">
+                        <div class="kpi-title">Contract Status</div>
+                        <div class="kpi-value">In Review</div>
+                        <div class="kpi-status">
+                            <span class="kpi-status-dot at-risk"></span>
+                            Legal review ongoing
+                            <span class="kpi-status-dot on-track"></span>
+                            CV completed
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress & Highlights Section -->
+            <section class="section" aria-labelledby="progress-highlights-title">
+                <h2 id="progress-highlights-title" class="section-title">Progress & Highlights</h2>
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <h3 class="highlight-title">Alignment Project</h3>
+                        <div class="highlight-content">
+                            <p>Dua sesi alignment (<strong>19 & 26 Agustus</strong>) telah dilakukan. Estimasi pengembangan yang dijanjikan <strong>29 Agustus</strong> belum dipenuhi; MileApp masih meminta huddle session intensif dalam minggu ini.</p>
+                            <div class="impact-statement">Tim Product (Temanbizz) standby di huddle room untuk mendukung penyelesaian klarifikasi.</div>
+                            <ul>
+                                <li>Alignment sessions completed but vendor still requesting clarifications</li>
+                                <li>Estimation deadline missed, impacting timeline</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <h3 class="highlight-title">Dokumentasi & BRD</h3>
+                        <div class="highlight-content">
+                            <p>BRD final selesai <strong>25 Agustus</strong> setelah semua komentar ditutup. FSD detail dan Data Integrity Layer menunggu pendekatan dari MileApp selesai, namun sudah mulai dicicil berdasarkan asumsi saat ini.</p>
+                            <div class="impact-statement">Dokumentasi telah lengkap namun pendekatan implementasi dari MileApp masih tertunda.</div>
+                            <ul>
+                                <li>BRD selesai dan semua komentar user sudah diresolve</li>
+                                <li>FSD dan detail Data Integrity Layer blocked karena estimasi dan visibility approach MileApp belum selesai</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <h3 class="highlight-title">Integrasi & IT</h3>
+                        <div class="highlight-content">
+                            <p>Uji coba awal data flow dari MileApp ke NNA <strong>berhasil</strong> (belum real scenario). Integrasi Oracle Meta, Pro Int, Settlement, dan DWH inisiatif sedang berjalan sesuai update mingguan IT NNA.</p>
+                            <div class="impact-statement">Initial integration test dengan MileApp selesai.</div>
+                            <ul>
+                                <li>Proof of concept integration successful</li>
+                                <li>Multiple system integrations in progress sesuai update IT Team (email update Mas Adik)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <h3 class="highlight-title">Data Sharing</h3>
+                        <div class="highlight-content">
+                            <p>Penyediaan sample data (AR/Piutang, GeoTree, Vehicle, Employee-Vehicle, Product) masih berjalan mengikuti permintaan MileApp.</p>
+                            <div class="impact-statement">Sample data provision ongoing untuk support understanding MileApp.</div>
+                            <ul>
+                                <li>Multiple data samples disediakan oleh NNA team</li>
+                                <li>Penyediaan sample data masih berlangsung seiring dengan MileApp team masih mencerna scope dari dokumentasi NNA</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <h3 class="highlight-title">Compliance & Resourcing</h3>
+                        <div class="highlight-content">
+                            <p>CV developer MileApp telah dilengkapi pada <strong>29 Agustus</strong>. Finalisasi kontrak MileApp dengan Legal NNA masih dalam review.</p>
+                            <div class="impact-statement">CV semua sudah diterima oleh NNA tapi final kontrak dengan MileApp at Risk.</div>
+                            <ul>
+                                <li>Developer CVs sudah diterima semua</li>
+                                <li>Finalisasi kontrak delay, butuh eskalasi</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timeline & Task Tracking -->
+            <section class="section" aria-labelledby="timeline-tracking-title">
+                <h2 id="timeline-tracking-title" class="section-title">Timeline & Task Tracking</h2>
+                
+                <div class="timeline-container">
+                    <div class="milestone-bar">
+                        <div class="milestone completed">
+                            <div class="milestone-dot"></div>
+                            <div class="milestone-label">Project Kickoff</div>
+                            <div class="milestone-date">19 Aug 2025</div>
+                        </div>
+                        <div class="milestone completed">
+                            <div class="milestone-dot"></div>
+                            <div class="milestone-label">BRD Finalization</div>
+                            <div class="milestone-date">25 Aug 2025</div>
+                        </div>
+                        <div class="milestone current">
+                            <div class="milestone-dot"></div>
+                            <div class="milestone-label">Vendor Estimation</div>
+                            <div class="milestone-date">29 Aug 2025</div>
+                        </div>
+                        <div class="milestone future">
+                            <div class="milestone-dot"></div>
+                            <div class="milestone-label">Contract Finalization</div>
+                            <div class="milestone-date">05 Sep 2025</div>
+                        </div>
+                        <div class="milestone future">
+                            <div class="milestone-dot"></div>
+                            <div class="milestone-label">(ETA) Development Start</div>
+                            <div class="milestone-date">8 Sep 2025</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="task-table-container">
+                    <table class="task-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%"><button>Task</button></th>
+                                <th style="width: 15%"><button>PIC</button></th>
+                                <th style="width: 10%"><button>Start</button></th>
+                                <th style="width: 12%"><button>Target</button></th>
+                                <th style="width: 12%"><button>Actual</button></th>
+                                <th style="width: 10%"><button>Status</button></th>
+                                <th style="width: 16%"><button>Notes</button></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Estimasi Development dari MileApp</td>
+                                <td>MileApp</td>
+                                <td>19 Aug</td>
+                                <td>29 Aug</td>
+                                <td>-</td>
+                                <td><span class="status-chip at-risk">At Risk</span></td>
+                                <td>Tim MileApp butuh waktu review scope lebih detail</td>
+                            </tr>
+                            <tr>
+                                <td>Finalisasi BRD</td>
+                                <td>Product (Temanbizz team)</td>
+                                <td>19 Aug</td>
+                                <td>29 Aug</td>
+                                <td>25 Aug</td>
+                                <td><span class="status-chip done">Done</span></td>
+                                <td>Komentar-komentar dari Pak Indra di BRD sudah diclose semua sejak 25 Aug 2025</td>
+                            </tr>
+                            <tr>
+                                <td>FSD Detail dan tambahan Data Integrity layer</td>
+                                <td>Product (Temanbizz team) & IT NNA</td>
+                                <td>25 Aug</td>
+                                <td>29 Aug</td>
+                                <td>-</td>
+                                <td><span class="status-chip not-started">Not Started</span></td>
+                                <td>Menunggu Estimasi Development dari MileApp dan close semua keterangan bagaiman approach MileApp terhadap fitur</td>
+                            </tr>
+                            <tr>
+                                <td>Penyediaan sample data</td>
+                                <td>All NNA</td>
+                                <td>22 Aug</td>
+                                <td>29 Aug</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Penyediaan sample data masih berjalan seiring MileApp coba memahami dokumentasi</td>
+                            </tr>
+                            <tr>
+                                <td>CV Developer MileApp</td>
+                                <td>MileApp</td>
+                                <td>19 Aug</td>
+                                <td>29 Aug</td>
+                                <td>29 Aug</td>
+                                <td><span class="status-chip done">Done</span></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Kontrak MileApp (Legal)</td>
+                                <td>MileApp & Legal NNA</td>
+                                <td>19 Aug</td>
+                                <td>29 Aug</td>
+                                <td>-</td>
+                                <td><span class="status-chip at-risk">At Risk</span></td>
+                                <td>Proses review legal dari kedua pihak</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Tabel Integrasi & IT NNA -->
+            <section class="section" aria-labelledby="integration-tracking-title">
+                <h2 id="integration-tracking-title" class="section-title">Integrasi & IT NNA Tracking</h2>
+                
+                <div class="task-table-container">
+                    <table class="task-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%"><button>Task</button></th>
+                                <th style="width: 15%"><button>PIC</button></th>
+                                <th style="width: 10%"><button>Start</button></th>
+                                <th style="width: 12%"><button>Target</button></th>
+                                <th style="width: 12%"><button>Actual</button></th>
+                                <th style="width: 10%"><button>Status</button></th>
+                                <th style="width: 16%"><button>Notes</button></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Integrasi Oracle Meta dengan New SFA, DMS</td>
+                                <td>IT NNA</td>
+                                <td>15 Jul</td>
+                                <td>5 Sep</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Status Updated di weekly report IT oleh Mas Adik</td>
+                            </tr>
+                            <tr>
+                                <td>Integrasi Pro Int dengan New SFA, DMS</td>
+                                <td>IT NNA</td>
+                                <td>19 Aug</td>
+                                <td>5 Sep</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Status updated di weekly report IT oleh Mas Adik</td>
+                            </tr>
+                            <tr>
+                                <td>Optimasi proses existing settlement di Oracle Meta</td>
+                                <td>IT NNA</td>
+                                <td>8 Aug</td>
+                                <td>TBC</td>
+                                <td></td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Status updated di weekly report IT oleh Mas Adik</td>
+                            </tr>
+                            <tr>
+                                <td>Optimasi Penggunaan Data (DWH inisiatif)</td>
+                                <td>IT NNA</td>
+                                <td>8 Aug</td>
+                                <td>12 Sep</td>
+                                <td></td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Status updated di weekly report IT oleh Mas Adik</td>
+                            </tr>
+                            <tr>
+                                <td>Perhitungan Estimasi biaya total new SFA-DMS</td>
+                                <td>IT NNA</td>
+                                <td>11 Aug</td>
+                                <td>5 Sep</td>
+                                <td></td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Status updated di weekly report IT oleh Mas Adik</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Two Column Layout for Risks and Next Steps -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Risks Section -->
+                <section class="section" aria-labelledby="risks-title">
+                    <h2 class="section-title">3. Risiko / Hambatan</h2>
+                    <div class="risks-list">
+                        <div class="risk-item">
+                            <div class="risk-severity high">⚠</div>
+                            <div class="risk-content">
+                                <div class="risk-title">Kesiapan DWH dan Struktur Data Internal NNA belum semuanya ready; minimal mock structure harus segera tersedia untuk integrasi.</div>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-severity high">⚠</div>
+                            <div class="risk-content">
+                                <div class="risk-title">Pemahaman tim MileApp terhadap scope & ekspektasi masih terbatas meskipun flow/BRD sudah dibagikan → berpotensi geser timeline saat development.</div>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-severity high">⚠</div>
+                            <div class="risk-content">
+                                <div class="risk-title">Finalisasi kontrak MileApp masih pending.</div>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-severity high">⚠</div>
+                            <div class="risk-content">
+                                <div class="risk-title">Per tgl 2 Sept 2025, berdasarkan Priority Development, MileApp confirm baru deep dive sampai BP - SOP Kunjungan Salesman.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Next Steps Section -->
+                <section class="section" aria-labelledby="next-steps-title">
+                    <h2 class="section-title">4. Next Steps</h2>
+                    <div class="next-steps-list">
+                        <h3 class="next-steps-category">Terkait Prioritas Saat Ini:</h3>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">MileApp mundur untuk memberi estimasi awal yang sebelumnya dijanjikan 29 Agustus 2025.</div>
+                            </div>
+                        </div>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">IT & Sales NNA melengkapi semua sample data. Terutama yang diminta oleh MileApp team selama proses "Huddle Room". Dokumentasi ada Priority Development.</div>
+                            </div>
+                        </div>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">MileApp segera finalisasi kontrak dengan Legal NNA.</div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="next-steps-category">Terkait Risiko/Hambatan:</h3>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">Jika MileApp masih belum solid memahami scope.</div>
+                                <div class="risk-mitigation">Mitigasi: Mengadakan intense huddle terkait pemahaman scope dan quick alignment untuk persiapan development MileApp → (Status: In Progress)</div>
+                            </div>
+                        </div>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">Jika DWH tidak siap</div>
+                                <div class="risk-mitigation">Mitigasi: menggunakan mock structure sebagai context untuk MileApp team agar development tidak tertunda. → (Status: In Progress)</div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="next-steps-category">Eskalasi ke Project Owner -> SteerCo Jika:</h3>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">Kontrak MileApp tidak selesai minggu ini (Minggu Pertama September 2025).</div>
+                            </div>
+                        </div>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">Alignment tidak usai-usai di minggu ini (Minggu Pertama September 2025).</div>
+                            </div>
+                        </div>
+                        <div class="next-step-item">
+                            <div class="next-step-checkbox"></div>
+                            <div class="next-step-content">
+                                <div class="next-step-title">Estimasi timeline tidak bisa dikeluarkan oleh MileApp di minggu ini (Minggu Pertama September 2025).</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <p>Contact: yoga@temanbizz.digital, lazuardi@temanbizz.digital</p>
+                    <p>Report v1.2</p>
+                </div>
+                <div>
+                    <p>For internal circulation only</p>
+                    <p>© 2025 Teman Bisnis Digital</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
