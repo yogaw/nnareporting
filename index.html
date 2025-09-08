@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TemanBizz Dashboard - Weekly Project Reports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Updated color scheme per visual guidelines */
+            --color-primary: #0891b2;
+            --color-primary-light: #e0f2fe;
+            --color-on-track: #16a34a;
+            --color-on-track-light: #dcfce7;
+            --color-at-risk: #d97706;
+            --color-at-risk-light: #fef3c7;
+            --color-off-track: #dc2626;
+            --color-off-track-light: #fee2e2;
+            --color-done: #0d9488;
+            --color-done-light: #ccfbf1;
+            --color-text: #1e293b;
+            --color-text-light: #64748b;
+            --color-border: #e2e8f0;
+            --color-background: #ffffff;
+            --color-background-alt: #f8fafc;
+            --color-section-title: #0f172a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+            color: var(--color-text);
+            line-height: 1.5;
+            background-color: #f1f5f9;
+            font-size: 16px;
+        }
+        
+        /* Print optimization for A4 */
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                font-size: 12pt;
+            }
+            
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .header {
+                position: static;
+                box-shadow: none;
+            }
+            
+            .section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 1.5cm;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Grid system */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+        
+        /* Mobile-first approach - all elements stack by default */
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .md\:grid-cols-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--color-background);
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+        }
+        
+        .project-logo {
+            width: 3rem;
+            height: 3rem;
+            object-fit: contain;
+        }
+        
+        .header-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        /* Tablet and above */
+        @media (min-width: 640px) {
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .header-title {
+                font-size: 1.5rem;
+                flex-direction: row;
+                text-align: left;
+            }
+            
+            .header-meta {
+                flex-direction: row;
+                justify-content: flex-end;
+                width: auto;
+            }
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        .section {
+            background-color: var(--color-background);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-section-title);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        /* Report Card Styles */
+        .report-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .report-card {
+            background-color: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-card a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .report-card-header {
+            padding: 1rem;
+            background-color: var(--color-primary-light);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .report-card-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: var(--color-primary);
+        }
+        
+        .report-card-period {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            margin-top: 0.25rem;
+        }
+        
+        .report-card-content {
+            padding: 1rem;
+        }
+        
+        .report-card-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-on-track {
+            background-color: var(--color-on-track-light);
+            color: var(--color-on-track);
+        }
+        
+        .status-at-risk {
+            background-color: var(--color-at-risk-light);
+            color: var(--color-at-risk);
+        }
+        
+        .status-off-track {
+            background-color: var(--color-off-track-light);
+            color: var(--color-off-track);
+        }
+        
+        .report-card-summary {
+            font-size: 0.875rem;
+            color: var(--color-text);
+            margin-top: 0.5rem;
+        }
+        
+        .report-card-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+        
+        .view-report-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .view-report-btn:hover {
+            background-color: #0e7490;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .report-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-title">
+                    <img src="assets/images/project-logo.png" alt="Project Logo" class="project-logo" aria-label="Project logo">
+                    <div>
+                        <div>Pengembangan Aplikasi SFA-DMS 3.0</div>
+                        <div>Weekly Project Reports</div>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+        <div class="container">
+            <!-- Introduction Section -->
+            <section class="section" aria-labelledby="intro-title">
+                <h2 id="intro-title" class="section-title">Project Overview</h2>
+                <p>Halaman ini menyediakan akses ke seluruh laporan mingguan terkait pengembangan Sales Force Automation dan Distribution Management System 3.0 menggunakan vendor MileApp.</p>
+                <p>Silakan pilih laporan mingguan di bawah ini untuk melihat detail progres, pencapaian, risiko, serta langkah selanjutnya pada setiap periode pelaporan.</p>
+            </section>
+            
+            <!-- Weekly Reports Section -->
+            <section class="section" aria-labelledby="reports-title">
+                <h2 id="reports-title" class="section-title">Weekly Reports</h2>
+                
+                <div class="report-cards">
+                    <!-- Week 1 Report -->
+                    <div class="report-card">
+                        <a href="weeklyreport1.html">
+                            <div class="report-card-header">
+                                <div class="report-card-title">Week 1 Report</div>
+                                <div class="report-card-period">19 Agustus - 02 September 2025</div>
+                            </div>
+                            <div class="report-card-content">
+                                <span class="report-card-status status-at-risk">At Risk</span>
+                                <div class="report-card-summary">
+                                    Project berada pada status at risk karena estimasi dari vendor belum disampaikan tepat waktu dan finalisasi kontrak masih dalam proses.
+                                </div>
+                            </div>
+                            <div class="report-card-footer">
+                                <span>Last updated: 02 September 2025</span>
+                                <button class="view-report-btn">View Report</button>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Week 2 Report (Coming Soon) -->
+                    <div class="report-card">
+                        <a href="weeklyreport2.html">
+                            <div class="report-card-header">
+                                <div class="report-card-title">Week 2 Report</div>
+                                <div class="report-card-period">03 September - 08 September 2025</div>
+                            </div>
+                            <div class="report-card-content">
+                                <span class="report-card-status status-at-risk">At Risk</span>
+                                <div class="report-card-summary">
+                                    Project masih dalam status at risk karena Kontark belum final dan Development belum juga dimulai. 
+                                </div>
+                            </div>
+                            <div class="report-card-footer">
+                                <span>Last updated: 08 September 2025</span>
+                                <button class="view-report-btn">View Report</button>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Week 3 Report (Coming Soon) -->
+                    <div class="report-card">
+                        <div class="report-card-header">
+                            <div class="report-card-title">Week 3 Report</div>
+                            <div class="report-card-period">09 September - 15 September 2025</div>
+                        </div>
+                        <div class="report-card-content">
+                            <span class="report-card-status" style="background-color: #e2e8f0; color: #64748b;">Coming Soon</span>
+                            <div class="report-card-summary">
+                                This report will be available after the reporting period ends.
+                            </div>
+                        </div>
+                        <div class="report-card-footer">
+                            <span>Available after: 16 September 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="section" style="margin-top: 2rem; text-align: center;">
+        <div class="container">
+            <p style="font-size: 0.875rem; color: var(--color-text-light);">
+                &copy; 2025 Teman Bisnis Digital.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
