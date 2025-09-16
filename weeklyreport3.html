@@ -757,253 +757,169 @@
             color: var(--color-off-track);
         }
         
-        /* Risks Section */
-        .risks-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
+        /* Risk & Issues */
         .risk-item {
-            display: flex;
-            gap: 1rem;
+            border-left: 4px solid var(--color-border);
             padding: 1rem;
+            margin-bottom: 1rem;
             background-color: var(--color-background-alt);
-            border-radius: 0.75rem;
-            align-items: flex-start;
+            border-radius: 0 0.5rem 0.5rem 0;
         }
         
-        .risk-severity {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-        
-        .risk-severity.high {
+        .risk-item.high {
+            border-left-color: var(--color-severity-high);
             background-color: var(--color-severity-high-light);
-            color: var(--color-severity-high);
         }
         
-        .risk-severity.medium {
+        .risk-item.medium {
+            border-left-color: var(--color-severity-medium);
             background-color: var(--color-severity-medium-light);
-            color: var(--color-severity-medium);
         }
         
-        .risk-severity.low {
+        .risk-item.low {
+            border-left-color: var(--color-severity-low);
             background-color: var(--color-severity-low-light);
-            color: var(--color-severity-low);
-        }
-        
-        .risk-content {
-            flex: 1;
         }
         
         .risk-title {
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .risk-description {
+        .risk-severity {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .risk-severity.high {
+            background-color: var(--color-severity-high);
+            color: white;
+        }
+        
+        .risk-severity.medium {
+            background-color: var(--color-severity-medium);
+            color: white;
+        }
+        
+        .risk-severity.low {
+            background-color: var(--color-severity-low);
+            color: white;
+        }
+        
+        .risk-mitigation {
+            margin-top: 0.5rem;
             font-size: 0.875rem;
-            color: var(--color-text-light);
+            color: var(--color-text);
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 0.5rem;
+            border-radius: 0.25rem;
         }
         
-        /* Next Steps Section */
-        .next-steps-list {
+        /* Next Steps */
+        .next-steps-container {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
         
+        .next-steps-category {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+        
         .next-step-item {
-            padding: 1rem;
-            background-color: var(--color-background-alt);
-            border-radius: 0.75rem;
-            border-left: 4px solid var(--color-primary);
             display: flex;
             gap: 1rem;
+            padding: 0.75rem;
+            background-color: var(--color-background-alt);
+            border-radius: 0.5rem;
             align-items: flex-start;
-        }
-        
-        .next-step-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--color-primary);
-        }
-        
-        .next-step-description {
-            font-size: 0.875rem;
-        }
-        
-        .next-step-description ul {
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        .next-step-description li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .next-steps-category {
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--color-text);
-            font-size: 1rem;
         }
         
         .next-step-checkbox {
             width: 1.25rem;
             height: 1.25rem;
-            border: 2px solid var(--color-primary);
+            border: 2px solid var(--color-border);
             border-radius: 0.25rem;
             flex-shrink: 0;
-            position: relative;
+            margin-top: 0.125rem;
         }
         
         .next-step-content {
             flex: 1;
         }
         
-        .risk-mitigation {
-            font-size: 0.875rem;
-            color: var(--color-text-light);
-            margin-top: 0.5rem;
-            padding-left: 0.5rem;
-            border-left: 2px solid var(--color-primary-light);
+        .next-step-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
-        /* Status indicators for next steps */
+        .next-step-description {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+        
         .next-step-status {
             display: inline-flex;
             align-items: center;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
             margin-left: 0.5rem;
         }
-
+        
         .next-step-status.completed {
             background-color: var(--color-on-track-light);
             color: var(--color-on-track);
         }
-
+        
         .next-step-status.missed {
             background-color: var(--color-off-track-light);
             color: var(--color-off-track);
         }
-
+        
         .next-step-status.escalated {
             background-color: var(--color-at-risk-light);
             color: var(--color-at-risk);
         }
         
-        /* Executive Asks Section */
-        .executive-asks-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .executive-ask-item {
-            padding: 1rem;
-            background-color: var(--color-background-alt);
-            border-radius: 0.75rem;
-            border-left: 4px solid var(--color-primary);
-        }
-        
-        .executive-ask-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--color-primary);
-        }
-        
-        .executive-ask-description {
-            font-size: 0.875rem;
-        }
-        
-        /* References Section */
-        .references-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .reference-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-        }
-        
-        .reference-icon {
-            width: 1.25rem;
-            height: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--color-primary-light);
-            color: var(--color-primary);
-            border-radius: 50%;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-        
         /* Footer */
         .footer {
             background-color: var(--color-background);
-            padding: 1.5rem 0;
+            padding: 1.5rem 1rem;
             border-top: 1px solid var(--color-border);
             margin-top: 2rem;
         }
         
         .footer-content {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
             gap: 1rem;
-            font-size: 0.875rem;
+            text-align: center;
+            font-size: 0.75rem;
             color: var(--color-text-light);
         }
         
-        /* Mobile Responsive Adjustments */
-        @media (max-width: 640px) {
-            .risks-list .risk-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .risks-list .risk-severity {
-                margin-bottom: 0.5rem;
-            }
-            
-            .next-steps-list .next-step-item,
-            .executive-asks-list .executive-ask-item {
-                padding: 0.75rem;
-            }
-            
-            .footer {
-                padding: 0.75rem;
-                margin-top: 1rem;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-        }
-        
         @media (min-width: 640px) {
+            .footer {
+                padding: 2rem;
+            }
+            
             .footer-content {
                 flex-direction: row;
                 justify-content: space-between;
@@ -1028,11 +944,11 @@
                     <img src="assets/images/project-logo.png" alt="Project Logo" class="project-logo" aria-label="Project logo">
                     <div>
                         <div>Pengembangan Aplikasi SFA-DMS 3.0</div>
-                        <div class="period">03 September - 08 September 2025</div>
+                        <div class="period">09 September - 16 September 2025</div>
                     </div>
                 </div>
                 <div class="header-meta">
-                    <div class="last-updated">Last updated: 08 September 2025</div>
+                    <div class="last-updated">Last updated: 16 September 2025</div>
                     <a href="index.html" class="export-btn no-print" style="margin-right: 10px; font-size: 0.85rem; padding: 0.4rem 0.8rem;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 12H5"></path>
@@ -1052,177 +968,83 @@
             </div>
         </div>
     </header>
-
+    
     <!-- Main Content -->
-    <main class="main-content" role="main">
+    <main class="main-content">
         <div class="container">
-            <!-- Executive Summary Section -->
-            <section class="section" aria-labelledby="executive-summary-title">
-                <h2 id="executive-summary-title" class="section-title">Executive Summary</h2>
-                
+            <!-- Executive Summary -->
+            <section class="section">
+                <h2 class="section-title">Executive Summary</h2>
                 <div class="executive-summary">
-                    <div class="summary-text">
-                        Project berada pada status <strong>at risk</strong> karena estimasi dari vendor belum selesai dan finalisasi kontrak masih dalam proses. Dari total 37 items yang perlu diclosed oleh MileApp, baru 22 yang sudah dipelajari dan dapat diestimasi.
-                    </div>
-                </div>
-                
-                <div class="kpi-container">
-                    <div class="kpi-tile at-risk">
-                        <div class="kpi-title">Development Readiness</div>
-                        <div class="kpi-value">59%*</div>
-                        <div class="kpi-status">
-                            <span class="kpi-status-dot at-risk"></span>
-                            <span>22 dari 37 items closed</span>
-                        </div>
-                    </div>
-                    <div class="kpi-tile at-risk">
-                        <div class="kpi-title">Contract Status</div>
-                        <div class="kpi-value">On Hold</div>
-                        <div class="kpi-status">
-                            <span class="kpi-status-dot at-risk"></span>
-                            <span>Perlu finalisasi</span>
-                        </div>
-                    </div>
-                    <div class="kpi-tile at-risk">
-                        <div class="kpi-title">Integration Readiness</div>
-                        <div class="kpi-value">X%*</div>
-                        <div class="kpi-status">
-                            <span class="kpi-status-dot at-risk"></span>
-                            <span>Sesuai dengan update IT NNA</span>
-                        </div>
-                    </div>
-                    <div class="kpi-tile at-risk">
-                        <div class="kpi-title">Timeline Adherence</div>
-                        <div class="kpi-value">At Risk</div>
-                        <div class="kpi-status">
-                            <span class="kpi-status-dot at-risk"></span>
-                            <span>Estimasi belum selesai</span>
-                        </div>
-                    </div>
+                    <span class="status-indicator status-at-risk"></span>
+                    <p class="summary-text">
+                        Project masih dalam status at risk karena development belum dimulai (kontrak dalam fase finalisasi). Estimasi timeline dari MileApp sudah diterima dengan jadwal Go Live bertahap mulai November hingga Desember 2025.
+                    </p>
                 </div>
             </section>
-
-            <!-- Progress & Highlights Section -->
-            <section class="section" aria-labelledby="progress-highlights-title">
-                <h2 id="progress-highlights-title" class="section-title">1. Progress & Highlights</h2>
-                
+            
+            <!-- Progress & Highlights -->
+            <section class="section">
+                <h2 class="section-title">1. Progress & Highlights</h2>
                 <div class="highlights-grid">
                     <div class="highlight-card">
-                        <div class="highlight-title">Alignment Project</div>
+                        <h3 class="highlight-title">Alignment Project</h3>
                         <div class="highlight-content">
-                            <p>Estimasi pengembangan yang dijanjikan 29 Agustus belum dipenuhi. Dari total 37 items yang perlu diclosed (mengerti dan dapat diestimasi) oleh MileApp, per 8 September 2025:</p>
+                            <p>Estimasi pengembangan yang dijanjikan 29 Agustus belum dipenuhi; Dari total 37 items yang perlu diclosed (mengerti dan dapat diestimasi) oleh MileApp, per 16 September 2025:</p>
                             <ul>
-                                <li><strong>Closed:</strong> 22 (sudah dipelajari dan dapat diestimasi)</li>
-                                <li><strong>In Progress:</strong> 9 (sedang dipelajari dan masih ada yang ditanyakan ke NNA)</li>
-                                <li><strong>Open:</strong> 6 (belum dipelajari)</li>
+                                <li>Closed: 37</li>
+                                <li>Masih ada perlu alignment per hari ini terkait marketing dan inventory</li>
+                                <li>Ada tambahan BRD baru direquest hari ini perlu diprovide dari TemanBizz terkait Inventory</li>
                             </ul>
                         </div>
                     </div>
                     
                     <div class="highlight-card">
-                        <div class="highlight-title">Dokumentasi & BRD lanjutan</div>
+                        <h3 class="highlight-title">Dokumentasi & BRD lanjutan</h3>
                         <div class="highlight-content">
                             <p>FSD detail dan Data Integrity Layer masih menunggu pendekatan dari MileApp.</p>
-                            <p><strong>Status:</strong> sudah mulai dicicil namun belum presisi</p>
+                            <p><strong>Status: Pending</strong></p>
+                            <p>Tambahan BRD untuk Inventory</p>
                         </div>
                     </div>
                     
                     <div class="highlight-card">
-                        <div class="highlight-title">Integrasi & IT</div>
+                        <h3 class="highlight-title">Integrasi & IT</h3>
                         <div class="highlight-content">
                             <p>Updated sesuai dengan email mas Adik via email internal NNA</p>
                         </div>
                     </div>
                     
                     <div class="highlight-card">
-                        <div class="highlight-title">Data Sharing</div>
+                        <h3 class="highlight-title">Data Sharing</h3>
                         <div class="highlight-content">
-                            <p>Penyediaan sample data dan penjelasan masih on-going seiring dengan progress MileApp team masih membaca dan coba mengerti semua dokumen</p>
+                            <p>Penyediaan sample data dan penjelasan masih on-going seiring dengan progress MileApp team masih membaca dan coba mengerti semua dokumen.</p>
                         </div>
                     </div>
                     
                     <div class="highlight-card">
-                        <div class="highlight-title">Compliance & Resourcing</div>
+                        <h3 class="highlight-title">Compliance & Resourcing</h3>
                         <div class="highlight-content">
-                            <p>Finalisasi kontrak MileApp dengan Legal NNA masih on hold. Kemungkinan ada perubahan struktur sesuai dengan kesanggupan MileApp secara realistis</p>
+                            <p>Per 16 September 2025, finalisasi kontrak MileApp dengan Legal NNA masih in progress. Ada perubahan struktur sesuai dengan kesanggupan MileApp secara realistis.</p>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <!-- Timeline & Task Tracking Section -->
-            <section class="section" aria-labelledby="timeline-tracking-title">
-                <h2 id="timeline-tracking-title" class="section-title">2. Timeline Tracking & Task Status</h2>
-                
-                <div class="timeline-container">
-                    <!-- Mobile Milestone List (visible on small screens) -->
-                    <div class="mobile-milestones">
-                        <div class="mobile-milestone completed">
-                            <div class="mobile-milestone-dot"></div>
-                            <div class="mobile-milestone-content">
-                                <div class="mobile-milestone-label">BRD Finalization</div>
-                                <div class="mobile-milestone-date">25 Aug 2025</div>
-                            </div>
-                        </div>
-                        <div class="mobile-milestone current">
-                            <div class="mobile-milestone-dot"></div>
-                            <div class="mobile-milestone-content">
-                                <div class="mobile-milestone-label">Vendor Estimation</div>
-                                <div class="mobile-milestone-date">08 Sep 2025</div>
-                            </div>
-                        </div>
-                        <div class="mobile-milestone future">
-                            <div class="mobile-milestone-dot"></div>
-                            <div class="mobile-milestone-content">
-                                <div class="mobile-milestone-label">Contract Finalization</div>
-                                <div class="mobile-milestone-date">12 Sep 2025</div>
-                            </div>
-                        </div>
-                        <div class="mobile-milestone future">
-                            <div class="mobile-milestone-dot"></div>
-                            <div class="mobile-milestone-content">
-                                <div class="mobile-milestone-label">(ETA) Development Start</div>
-                                <div class="mobile-milestone-date">15 Sep 2025</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Desktop Milestone Bar (visible on larger screens) -->
-                    <div class="milestone-bar">
-                        <div class="milestone completed">
-                            <div class="milestone-dot"></div>
-                            <div class="milestone-label">BRD Finalization</div>
-                            <div class="milestone-date">25 Aug 2025</div>
-                        </div>
-                        <div class="milestone current">
-                            <div class="milestone-dot"></div>
-                            <div class="milestone-label">Vendor Estimation</div>
-                            <div class="milestone-date">08 Sep 2025</div>
-                        </div>
-                        <div class="milestone future">
-                            <div class="milestone-dot"></div>
-                            <div class="milestone-label">Contract Finalization</div>
-                            <div class="milestone-date">12 Sep 2025</div>
-                        </div>
-                        <div class="milestone future">
-                            <div class="milestone-dot"></div>
-                            <div class="milestone-label">(ETA) Development Start</div>
-                            <div class="milestone-date">15 Sep 2025</div>
-                        </div>
-                    </div>
-                </div>
-                
+            
+            <!-- Timeline Tracking & Task Status -->
+            <section class="section">
+                <h2 class="section-title">2. Timeline Tracking & Task Status</h2>
                 <div class="task-table-container">
                     <table class="task-table">
                         <thead>
                             <tr>
-                                <th style="width: 25%"><button>Task</button></th>
-                                <th style="width: 15%"><button>PIC</button></th>
-                                <th style="width: 10%"><button>Start</button></th>
-                                <th style="width: 12%"><button>Target</button></th>
-                                <th style="width: 12%"><button>Actual</button></th>
-                                <th style="width: 10%"><button>Status</button></th>
-                                <th style="width: 16%"><button>Notes</button></th>
+                                <th>Task</th>
+                                <th>PIC</th>
+                                <th>Start</th>
+                                <th>Target Selesai</th>
+                                <th>Aktual Selesai</th>
+                                <th>Status</th>
+                                <th>Notes/ Alasan Keterlambatan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1233,7 +1055,7 @@
                                 <td>29 Aug</td>
                                 <td>-</td>
                                 <td><span class="status-chip at-risk">At Risk</span></td>
-                                <td>Tim MileApp butuh waktu lebih lama untuk review scope lebih detail</td>
+                                <td>Detail Kontrak menjadi blocker<br>Tim MileApp butuh waktu lebih lama untuk review scope lebih detail</td>
                             </tr>
                             <tr>
                                 <td>FSD Detail dan tambahan Data Integrity layer</td>
@@ -1242,7 +1064,7 @@
                                 <td>12 Sep</td>
                                 <td>-</td>
                                 <td><span class="status-chip in-progress">In Progress</span></td>
-                                <td>Sudah mulai dicicil dengan asumsi saat ini (estimasi dengan asumsi saat ini)</td>
+                                <td>On Hold per 16 September 2025, move ke BRD Inventory<br>Sudah mulai dicicil dengan asumsi saat ini (estimasi dengan asumsi saat ini)<br>Estimasi awal 29 Aug 25<br>Menunggu Estimasi Development dari MileApp dan close semua keterangan bagaiman approach MileApp terhadap fitur</td>
                             </tr>
                             <tr>
                                 <td>Penyediaan sample data</td>
@@ -1260,31 +1082,8 @@
                                 <td>29 Aug</td>
                                 <td>-</td>
                                 <td><span class="status-chip in-progress">In Progress</span></td>
-                                <td>Proses review legal dari kedua pihak masih on hold</td>
+                                <td>Proses diskusi masih berlanjut per 16 September 2025<br>Proses review legal dari kedua pihak masih on hold</td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Tabel Integrasi & IT NNA -->
-            <section class="section" aria-labelledby="integration-tracking-title">
-                <h2 id="integration-tracking-title" class="section-title">Integrasi & IT NNA Tracking</h2>
-                
-                <div class="task-table-container">
-                    <table class="task-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 25%"><button>Task</button></th>
-                                <th style="width: 15%"><button>PIC</button></th>
-                                <th style="width: 10%"><button>Start</button></th>
-                                <th style="width: 12%"><button>Target</button></th>
-                                <th style="width: 12%"><button>Actual</button></th>
-                                <th style="width: 10%"><button>Status</button></th>
-                                <th style="width: 16%"><button>Notes</button></th>
-                            </tr>
-                        </thead>
-                        <tbody>
                             <tr>
                                 <td>Integrasi Oracle Meta dengan New SFA, DMS</td>
                                 <td>IT NNA</td>
@@ -1334,140 +1133,123 @@
                     </table>
                 </div>
             </section>
-
-            <!-- Two Column Layout for Risks and Next Steps -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Risks Section -->
-                <section class="section" aria-labelledby="risks-title">
-                    <h2 class="section-title">3. Risiko / Hambatan</h2>
-                    <div class="risks-list">
-                        <div class="risk-item">
-                            <div class="risk-severity high">⚠</div>
-                            <div class="risk-content">
-                                <div class="risk-title">Kesiapan DWH dan Struktur Data Internal NNA belum semuanya ready; minimal mock structure harus segera tersedia untuk integrasi.</div>
-                            </div>
-                        </div>
-                        <div class="risk-item">
-                            <div class="risk-severity high">⚠</div>
-                            <div class="risk-content">
-                                <div class="risk-title">Pemahaman tim MileApp terhadap scope & ekspektasi masih terbatas meskipun flow/BRD sudah dibagikan → berpotensi geser timeline saat development.</div>
-                            </div>
-                        </div>
-                        <div class="risk-item">
-                            <div class="risk-severity high">⚠</div>
-                            <div class="risk-content">
-                                <div class="risk-title">Finalisasi kontrak MileApp masih on hold.</div>
-                            </div>
-                        </div>
-                        <div class="risk-item">
-                            <div class="risk-severity high">⚠</div>
-                            <div class="risk-content">
-                                <div class="risk-title">Per tgl 8 Sept 2025, berdasarkan Priority Development, MileApp baru confirm sanggup untuk prioritas 1-4, sebagian priority 6 yg masuk scope master, versi awal priority 5 supervisory (dengan catatan)</div>
-                                <div class="risk-description">
-                                    <ul>
-                                        <li>Priority 1(master): 2 closed belum fully closed</li>
-                                        <li>Priority 3 (kunjungan): 2 belum fully closed, 2 In progress</li>
-                                        <li>Priority 6 (yg masuk scope master): In Progress</li>
-                                    </ul>
-                                </div>
-                            </div>
+            
+            <!-- Risks & Issues -->
+            <section class="section">
+                <h2 class="section-title">3. Risiko / Hambatan</h2>
+                <div class="risk-item high">
+                    <div class="risk-title">
+                        <span>Kesiapan DWH dan Struktur Data Internal NNA status menunggu update IT, oleh Mas Adik</span>
+                    </div>
+                </div>
+                <div class="risk-item high">
+                    <div class="risk-title">
+                        <span>Pemahaman tim MileApp terhadap scope & ekspektasi masih terbatas meskipun flow/BRD sudah dibagikan dan alignment terus dilakukan → berpotensi geser timeline saat development.</span>
+                    </div>
+                </div>
+                <div class="risk-item high">
+                    <div class="risk-title">
+                        <span>Finalisasi kontrak MileApp masih in progress, blocker di pasal-pasal dalam kontrak.</span>
+                    </div>
+                </div>
+                <div class="risk-item high">
+                    <div class="risk-title">
+                        <span>Per tgl 16 Sept 2025, berdasarkan Priority Development, MileApp masih ada alignment dan request tambahan BRD. Estimasi Milestone dari MileApp:</span>
+                    </div>
+                    <div class="risk-mitigation">
+                        <p><strong>Priority 1-4, 5(Supervisory Approval) dan 6:</strong></p>
+                        <p>20 October: UAT</p>
+                        <p>3 November: Go Live</p>
+                        <p><strong>Priority 5 (Supervisory activity & report summary):</strong></p>
+                        <p>17 November: UAT</p>
+                        <p>01 December: Go Live</p>
+                        <p><strong>Priority 7 (Taking Order & Inventory):</strong></p>
+                        <p>1 December: UAT</p>
+                        <p>15 December: Go Live</p>
+                    </div>
+                </div>
+                <div class="risk-item high">
+                    <div class="risk-title">
+                        <span>Risiko keterbatasan kapabilitas vendor MileApp</span>
+                    </div>
+                </div>
+                <div class="risk-item high">
+                    <div class="risk-title">
+                        <span>Risiko Beda ekspektasi untuk scope Inventory</span>
+                    </div>
+                    <div class="risk-mitigation">
+                        <p>Mitigasi: Create BRD untuk perjelas scope Inventory yang dimaksud oleh tim NNA</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Next Steps -->
+            <section class="section">
+                <h2 class="section-title">4. Next Steps</h2>
+                <div class="next-steps-container">
+                    <h3 class="next-steps-category">Terkait Prioritas Saat Ini:</h3>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">Tambahan BRD untuk Inventory untuk manage ekspektasi dan flow Inventory akan disignoff Sales NNA dan dishare ke Mile App team</div>
                         </div>
                     </div>
-                </section>
-
-                <!-- Next Steps Section -->
-                <section class="section" aria-labelledby="next-steps-title">
-                    <h2 class="section-title">4. Next Steps</h2>
-                    <div class="next-steps-list">
-                        <h3 class="next-steps-category">Terkait Prioritas Saat Ini:</h3>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">MileApp sudah menyanggupi untuk scope Milestone 1 (20 October 2025) untuk UAT pada flow prioritas 1-4, sebagian priority 6 yang jadi bagian scope master dan versi awal priority 5 (dengan catatan) dan dengan konfirmasi bahwa apabila Pipeline data Marketing program tidak tersedia, maka itu akan menjadi stopper.</div>
-                            </div>
-                        </div>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Ekspektasi MileStone per 3 November 2025 untuk versi lengkap Supervisory App tidak dapat terpenuhi</div>
-                            </div>
-                        </div>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Pipeline data untuk Marketing Program dan Marketing Activity (yang sumbernya bukan dari Meta) harus diperjelas terlebih dahulu integrasinya.</div>
-                            </div>
-                        </div>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">MileApp segera finalisasi kontrak dengan Legal NNA.</div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="next-steps-category">Terkait Risiko/Hambatan:</h3>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Jika MileApp masih belum solid memahami scope.</div>
-                                <div class="risk-mitigation">Mitigasi: Mengadakan intense huddle terkait pemahaman scope dan quick alignment untuk persiapan development MileApp → (Status: In Progress)</div>
-                            </div>
-                        </div>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Jika DWH tidak siap</div>
-                                <div class="risk-mitigation">Mitigasi: menggunakan mock structure sebagai context untuk MileApp team agar development tidak tertunda. → (Status: In Progress)</div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="next-steps-category">Eskalasi ke Project Owner -> SteerCo:</h3>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Kontrak MileApp tidak selesai minggu pertama September <span class="next-step-status missed">Missed</span></div>
-                                <div class="next-step-description">Action taken: Eskalasi ke Project Owner & PMO NNA</div>
-                            </div>
-                        </div>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Alignment tidak usai-usai di minggu pertama September 2025 <span class="next-step-status escalated">Escalated</span></div>
-                                <div class="next-step-description">Action taken: Email minta kesanggupan dari MileApp. Subject: "Proposal Timeline Submission from NNA – SFA DMS Gen 3
-"</div>
-                            </div>
-                        </div>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Estimasi timeline tidak bisa dikeluarkan oleh MileApp di minggu pertama September 2025. <span class="next-step-status escalated">Escalated</span></div>
-                                <div class="next-step-description">Action taken: Eskalasi ke Project Owner & PMO NNA</div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="next-steps-category">Risiko keterbatasan kapabilitas vendor MileApp:</h3>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Risiko Supervisory App <span class="next-step-status escalated">Escalated</span></div>
-                                <div class="risk-mitigation">Mitigasi: konfirmasi ulang roadmap Supervisory agar ekspektasi jelas berdasarkan kapasitas MileApp saat ini.</div>
-                                <div class="next-step-description">Action taken: Meeting scheduled with MileApp CTO</div>
-                            </div>
-                        </div>
-                        <div class="next-step-item">
-                            <div class="next-step-checkbox"></div>
-                            <div class="next-step-content">
-                                <div class="next-step-title">Risiko keterbatasan custom effort oleh MileApp <span class="next-step-status escalated">Escalated</span></div>
-                                <div class="risk-mitigation">Mitigasi: MileApp diminta tunjukkan kapasitas tim dev dengan resource plan resmi.</div>
-                                <div class="next-step-description">Action taken: Formal request sent to MileApp management</div>
-                            </div>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">IT Team untuk share update terkait Integrasi dan Pipeline IT terkait project SFA DMS 3.0 ke TemanBizz team</div>
                         </div>
                     </div>
-                </section>
-            </div>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">MileApp segera finalisasi kontrak dengan Legal NNA.</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="next-steps-category">Terkait Risiko/Hambatan:</h3>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">Jika MileApp masih belum solid memahami scope.</div>
+                            <div class="risk-mitigation">Mitigasi: Mengadakan intense huddle terkait pemahaman scope dan quick alignment untuk persiapan development MileApp → (Status: In Progress)</div>
+                        </div>
+                    </div>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">Jika DWH tidak siap</div>
+                            <div class="risk-mitigation">Mitigasi: menggunakan mock structure sebagai context untuk MileApp team agar development tidak tertunda. → (Status: In Progress)</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="next-steps-category">Parameter untuk Eskalasi ke Project Owner -> SteerCo:</h3>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">Kontrak MileApp tidak selesai yang tadinya target minggu pertama September, sekarang sudah minggu ketiga September <span class="next-step-status escalated">Escalated</span></div>
+                            <div class="next-step-description">Action taken: Eskalasi ke Project Owner & PMO NNA</div>
+                        </div>
+                    </div>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">Alignment tambahan tidak usai-usai dari minggu pertama September 2025 <span class="next-step-status escalated">Escalated</span></div>
+                            <div class="next-step-description">Action taken: Email minta kesanggupan dari MileApp. Subject: "Proposal Timeline Submission from NNA – SFA DMS Gen 3"</div>
+                        </div>
+                    </div>
+                    <div class="next-step-item">
+                        <div class="next-step-checkbox"></div>
+                        <div class="next-step-content">
+                            <div class="next-step-title">Estimasi timeline sudah bisa dikeluarkan oleh MileApp di minggu ketiga September 2025, Blocker di kontrak <span class="next-step-status escalated">Escalated</span></div>
+                            <div class="next-step-description">Action taken: Eskalasi ke Project Owner & PMO NNA</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
-
+    
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
