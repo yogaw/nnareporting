@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TemanBizz Dashboard - SFA-DMS Weekly Project Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #0891b2;
+            --color-primary-light: #e0f2fe;
+            --color-on-track: #16a34a;
+            --color-on-track-light: #dcfce7;
+            --color-at-risk: #d97706;
+            --color-at-risk-light: #fef3c7;
+            --color-off-track: #dc2626;
+            --color-off-track-light: #fee2e2;
+            --color-done: #0d9488;
+            --color-done-light: #ccfbf1;
+            --color-text: #1e293b;
+            --color-text-light: #64748b;
+            --color-border: #e2e8f0;
+            --color-background: #ffffff;
+            --color-background-alt: #f8fafc;
+            --color-section-title: #0f172a;
+            
+            --color-severity-high: #dc2626;
+            --color-severity-high-light: rgba(220, 38, 38, 0.1);
+            --color-severity-medium: #d97706;
+            --color-severity-medium-light: rgba(217, 119, 6, 0.1);
+            --color-severity-low: #16a34a;
+            --color-severity-low-light: rgba(22, 163, 74, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+            color: var(--color-text);
+            line-height: 1.5;
+            background-color: #f1f5f9;
+            font-size: 16px;
+        }
+
+        @page { size: A4; margin: 1.5cm; }
+        @media print {
+            body { background-color: white; font-size: 12pt; }
+            .container { width: 100%; max-width: 100%; padding: 0; }
+            .header { position: static; box-shadow: none; }
+            .section { break-inside: avoid; page-break-inside: avoid; margin-bottom: 1.5cm; }
+            .no-print { display: none !important; }
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+
+        .header {
+            background-color: var(--color-background);
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header-content { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .header-title {
+            font-size: 1.25rem; font-weight: 700;
+            display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.5rem;
+        }
+        .project-logo { width: 3rem; height: 3rem; object-fit: contain; }
+        .header-meta { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%; }
+        .period { font-weight: 500; color: var(--color-text-light); font-size: 0.875rem; }
+        .last-updated { font-size: 0.75rem; color: var(--color-text-light); }
+
+        @media (min-width: 640px) {
+            .header { padding: 1.5rem; }
+            .header-content { flex-direction: row; justify-content: space-between; }
+            .header-title { font-size: 1.5rem; flex-direction: row; text-align: left; gap: 1rem; }
+            .project-logo { width: 4rem; height: 4rem; }
+            .header-meta { flex-direction: row; justify-content: flex-end; width: auto; gap: 1rem; }
+        }
+
+        .main-content { padding: 1.5rem 0; }
+        .section {
+            background-color: var(--color-background);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1rem; margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-section-title);
+            border-bottom: 2px solid var(--color-primary); padding-bottom: 0.5rem; display: inline-block;
+        }
+        @media (min-width: 640px) {
+            .main-content { padding: 2rem 0; }
+            .section { border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; }
+            .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; }
+        }
+
+        /* Highlights */
+        .highlights-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .highlights-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; } }
+        .highlight-card {
+            background-color: var(--color-background);
+            border-radius: 1rem; padding: 1.25rem;
+            border-left: 5px solid var(--color-primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .highlight-title { font-weight: 700; margin-bottom: 0.75rem; color: var(--color-primary); font-size: 1.125rem; }
+        .highlight-content p { margin-bottom: 0.5rem; }
+        .highlight-content ul { padding-left: 1.25rem; margin-top: 0.5rem; }
+        .highlight-content li { margin-bottom: 0.5rem; }
+
+        /* Task table */
+        .task-table-container { overflow-x: auto; margin: 0 -1rem; padding: 0 1rem; }
+        .task-table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: 0.75rem; }
+        @media (min-width: 640px) { .task-table-container { margin: 0; padding: 0; } .task-table { font-size: 0.875rem; } }
+        .task-table th {
+            background-color: var(--color-background-alt);
+            padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: var(--color-text);
+            border-bottom: 2px solid var(--color-border);
+        }
+        .task-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+        .task-table tr:hover { background-color: var(--color-background-alt); }
+        .status-chip {
+            display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px;
+            font-size: 0.75rem; font-weight: 500; white-space: nowrap;
+        }
+        .status-chip.done { background-color: var(--color-on-track-light); color: var(--color-on-track); }
+        .status-chip.in-progress { background-color: var(--color-primary-light); color: var(--color-primary); }
+        .status-chip.on-hold { background-color: var(--color-at-risk-light); color: var(--color-at-risk); }
+        .status-chip.not-started { background-color: var(--color-border); color: var(--color-text-light); }
+
+        /* Risks */
+        .risk-list { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .risk-list { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); } }
+        .risk-item {
+            border: 1px solid var(--color-border); border-radius: 0.75rem; padding: 1rem;
+            background-color: var(--color-background);
+        }
+        .risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .risk-title { font-weight: 600; color: var(--color-text); }
+        .risk-severity { font-size: 0.75rem; font-weight: 600; padding: 0.125rem 0.5rem; border-radius: 9999px; }
+        .severity-high { background-color: var(--color-severity-high-light); color: var(--color-severity-high); }
+        .severity-medium { background-color: var(--color-severity-medium-light); color: var(--color-severity-medium); }
+        .severity-low { background-color: var(--color-severity-low-light); color: var(--color-severity-low); }
+        .risk-description { color: var(--color-text); font-size: 0.9rem; }
+
+        /* Next Steps (match weeklyreport2 style) */
+        .next-steps-container { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .next-steps-container { grid-template-columns: 1fr 1fr; } }
+        .next-steps-category { border: 1px solid var(--color-border); border-radius: 0.75rem; padding: 1rem; background: var(--color-background); }
+        .next-steps-category h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-section-title); }
+        .next-steps-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+        .next-step-item {
+            display: flex; align-items: flex-start; gap: 0.5rem;
+            border: 1px dashed var(--color-border); border-radius: 0.5rem; padding: 0.5rem 0.75rem; background: var(--color-background-alt);
+        }
+        .next-step-checkbox { width: 1rem; height: 1rem; border: 2px solid var(--color-border); border-radius: 0.25rem; margin-top: 0.25rem; }
+        .next-step-content { flex: 1; }
+        .next-step-title { font-weight: 600; }
+        .next-step-description { font-size: 0.875rem; color: var(--color-text-light); }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-title">
+                    <img src="assets/images/project-logo.png" alt="Project Logo" class="project-logo" aria-label="Project logo">
+                    <div>
+                        <div>Pengembangan Aplikasi SFA-DMS 3.0</div>
+                        <div>Weekly Project Report</div>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <div class="period">Periode: 2 October - 7 October 2025</div>
+                    <div class="last-updated">Last updated: 7 October 2025</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content" role="main">
+        <div class="container">
+            <!-- 1. Progress & Highlights -->
+            <section class="section">
+                <h2 class="section-title">1. Progress & Highlights</h2>
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <div class="highlight-title">Alignment Project</div>
+                        <div class="highlight-content">
+                            <p>Progress re-alignment berdasarkan update terakhir:</p>
+                            <ul>
+                                <li>Sales Order: status belum closed.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">Integrasi & Progress IT</div>
+                        <div class="highlight-content">
+                            <ul>
+                                <li>Pengadaan Jasa Integrasi Oracle Meta dengan New SFA Apps: 7 October 2025, No Update.</li>
+                                <li>Optimasi proses existing settlement di Oracle Meta: No Update.</li>
+                                <li>Pengadaan jasa integrasi Pro-Int dengan New SFA Apps: 7 October 2025, No Update.</li>
+                                <li>Optimasi Penggunaan data: 7 October 2025, No Update.</li>
+                                <li>Migrasi “raw data” existing SFA: 7 October 2025, No Update.</li>
+                                <li>Template untuk kelengkapan dokumentasi development: 3 October 2025, secara internal sudah aligned. Menunggu framework MileApp untuk adjustment lebih lanjut.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">Compliance & Resourcing</div>
+                        <div class="highlight-content">
+                            <p>Feedback Kontrak kerja NNA-MileApp dan estimasi akan di provide 7 October 2025.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Timeline Tracking & Task Status -->
+            <section class="section">
+                <h2 class="section-title">2. Timeline Tracking & Task Status</h2>
+                <div class="task-table-container">
+                    <table class="task-table" aria-label="Task status table">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>PIC</th>
+                                <th>Start</th>
+                                <th>Target Selesai</th>
+                                <th>Aktual Selesai</th>
+                                <th>Status</th>
+                                <th>Notes / Alasan Keterlambatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Re-Alignment Gathering Context (setelah mufakat kontrak)</td>
+                                <td>MileApp</td>
+                                <td>20 Sept</td>
+                                <td>3 Oct</td>
+                                <td>3 Oct</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>
+                                    Ada beberapa status belum diclosed oleh MileApp.<br>
+                                    Jadwal dipropose MileApp, Tim NNA hadir di setiap sesi berdasarkan request konteks.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Estimasi Development dari MileApp</td>
+                                <td>MileApp</td>
+                                <td>19 Aug</td>
+                                <td>29 Aug</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>
+                                    Milestone 1 akan diprovide 7 Oct 2025 (konfirmasi di grup Whatsapp oleh Rendy).<br>
+                                    Dependency: Realignment gathering context.<br>
+                                    Detail kontrak menjadi blocker.<br>
+                                    Tim MileApp butuh waktu lebih lama untuk review scope lebih detail.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>FSD Detail dan tambahan Data Integrity layer</td>
+                                <td>Product (TemanBizz Team) &amp; IT NNA</td>
+                                <td>25 Aug</td>
+                                <td>12 Sep</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>
+                                    Dependency: Realignment gathering context.<br>
+                                    On Hold per 16 September 2025, move ke BRD Inventory.<br>
+                                    Sudah mulai dicicil dengan asumsi saat ini (estimasi dengan asumsi saat ini).<br>
+                                    Menunggu Estimasi Development dari MileApp dan close semua keterangan bagaimana approach MileApp terhadap fitur.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Kontrak MileApp (Legal)</td>
+                                <td>MileApp &amp; Legal NNA</td>
+                                <td>19 Aug</td>
+                                <td>29 Aug</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>
+                                    Akan diberi kabar by 7 October 2025.<br>
+                                    Last Update: 22 September 2025, mufakat untuk re-alignment, kontrak on hold sampai re-alignment selesai.<br>
+                                    Proses diskusi masih berlanjut per 16 September 2025.<br>
+                                    Proses review legal dari kedua pihak masih on hold.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Integrasi Oracle Meta dengan New SFA, DMS</td>
+                                <td>IT NNA</td>
+                                <td>15 Jul</td>
+                                <td>5 Sep</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Proses penunjukan langsung vendor MII sedang berlangsung.</td>
+                            </tr>
+                            <tr>
+                                <td>Integrasi Pro Int dengan New SFA, DMS</td>
+                                <td>IT NNA</td>
+                                <td>19 Aug</td>
+                                <td>5 Sep</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Proses penunjukan langsung vendor MII sedang berlangsung.</td>
+                            </tr>
+                            <tr>
+                                <td>Optimasi proses existing settlement di Oracle Meta</td>
+                                <td>IT NNA</td>
+                                <td>8 Aug</td>
+                                <td>TBC</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>No Update.</td>
+                            </tr>
+                            <tr>
+                                <td>Optimasi Penggunaan Data (DWH inisiatif)</td>
+                                <td>IT NNA</td>
+                                <td>8 Aug</td>
+                                <td>12 Sep</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Menunggu latest update quotation vendor.</td>
+                            </tr>
+                            <tr>
+                                <td>Perhitungan Estimasi biaya total new SFA-DMS</td>
+                                <td>IT NNA</td>
+                                <td>11 Aug</td>
+                                <td>5 Sep</td>
+                                <td>30 Sep</td>
+                                <td><span class="status-chip done">Done</span></td>
+                                <td>Sudah present ke Sterco.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. Risiko / Hambatan -->
+            <section class="section">
+                <h2 class="section-title">3. Risiko / Hambatan</h2>
+                <div class="risk-list">
+                    <div class="risk-item">
+                        <div class="risk-header">
+                            <div class="risk-title">Carry Over risiko Hambatan dari report 23-29 September 2025</div>
+                            <span class="risk-severity severity-medium">Severity: Medium</span>
+                        </div>
+                        <div class="risk-description">
+                            Beberapa risiko dari periode sebelumnya masih relevan dan belum ditutup; mitigasi lanjutan diperlukan untuk mencegah dampak terhadap jadwal development.
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-header">
+                            <div class="risk-title">Kapabilitas development sesuai requirement user belum tervalidasi</div>
+                            <span class="risk-severity severity-high">Severity: High</span>
+                        </div>
+                        <div class="risk-description">
+                            Sampai report ini dibuat belum ada visibility dan dokumen yang dishare oleh MileApp sebagai hasil dari proses re-alignment; berpotensi menunda konfirmasi scope dan estimasi development.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Next Steps -->
+            <section class="section">
+                <h2 class="section-title">4. Next Steps</h2>
+                <div class="next-steps-container">
+                    <div class="next-steps-category">
+                        <h3>Terkait Prioritas Saat Ini</h3>
+                        <ul class="next-steps-list">
+                            <li class="next-step-item">
+                                <span class="next-step-checkbox" aria-hidden="true"></span>
+                                <div class="next-step-content">
+                                    <div class="next-step-title">MileApp untuk memberi visibility estimasi development.</div>
+                                    <div class="next-step-description">Target update milestone pertama pada 7 October 2025.</div>
+                                </div>
+                            </li>
+                            <li class="next-step-item">
+                                <span class="next-step-checkbox" aria-hidden="true"></span>
+                                <div class="next-step-content">
+                                    <div class="next-step-title">NNA dan MileApp untuk finalisasi kontrak.</div>
+                                    <div class="next-step-description">Melanjutkan proses setelah re-alignment ditutup.</div>
+                                </div>
+                            </li>
+                            <li class="next-step-item">
+                                <span class="next-step-checkbox" aria-hidden="true"></span>
+                                <div class="next-step-content">
+                                    <div class="next-step-title">Resolve risiko dan hambatan dari reporting sebelumnya.</div>
+                                    <div class="next-step-description">Prioritaskan mitigasi terhadap blocker yang berdampak ke timeline.</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="next-steps-category">
+                        <h3>Terkait Risiko/Hambatan</h3>
+                        <ul class="next-steps-list">
+                            <li class="next-step-item">
+                                <span class="next-step-checkbox" aria-hidden="true"></span>
+                                <div class="next-step-content">
+                                    <div class="next-step-title">Carry Over risiko dari report 23-29 September 2025.</div>
+                                    <div class="next-step-description">Lakukan review berkala dan dokumentasikan action items mitigasi hingga risiko ditutup.</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="section" style="margin-top: 2rem; text-align: center;">
+        <div class="container">
+            <p style="font-size: 0.875rem; color: var(--color-text-light);">
+                &copy; 2025 Teman Bisnis Digital.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
