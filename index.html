@@ -307,6 +307,24 @@
     </style>
 </head>
 <body>
+    <script>
+        // Check authentication before loading page content
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+        
+        // Optional: Check session timeout (24 hours)
+        const loginTime = sessionStorage.getItem('loginTime');
+        if (loginTime) {
+            const currentTime = new Date().getTime();
+            const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            
+            if (currentTime - parseInt(loginTime) > sessionDuration) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
     <!-- Header -->
     <header class="header" role="banner">
         <div class="container">
@@ -435,6 +453,46 @@
                             </div>
                             <div class="report-card-footer">
                                 <span>Last updated: 2 Oktober 2025</span>
+                                <button class="view-report-btn">View Report</button>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Week 6 Report -->
+                    <div class="report-card">
+                        <a href="weeklyreport6.html">
+                            <div class="report-card-header">
+                                <div class="report-card-title">Week 6 Report</div>
+                                <div class="report-card-period">01 Oktober - 07 Oktober 2025</div>
+                            </div>
+                            <div class="report-card-content">
+                                <span class="report-card-status status-at-risk">At Risk</span>
+                                <div class="report-card-summary">
+                                    Progress alignment project dan integrasi IT dengan fokus pada compliance dan resourcing.
+                                </div>
+                            </div>
+                            <div class="report-card-footer">
+                                <span>Last updated: 7 Oktober 2025</span>
+                                <button class="view-report-btn">View Report</button>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Week 7 Report -->
+                    <div class="report-card">
+                        <a href="weeklyreport7.html">
+                            <div class="report-card-header">
+                                <div class="report-card-title">Week 7 Report</div>
+                                <div class="report-card-period">08 Oktober - 21 Oktober 2025</div>
+                            </div>
+                            <div class="report-card-content">
+                                <span class="report-card-status status-at-risk">At Risk</span>
+                                <div class="report-card-summary">
+                                    Finalisasi kontrak dan persiapan development dengan fokus pada mitigasi risiko penundaan.
+                                </div>
+                            </div>
+                            <div class="report-card-footer">
+                                <span>Last updated: 21 Oktober 2025</span>
                                 <button class="view-report-btn">View Report</button>
                             </div>
                         </a>

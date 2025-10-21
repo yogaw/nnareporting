@@ -1017,6 +1017,24 @@
     </style>
 </head>
 <body>
+    <script>
+        // Check authentication before loading page content
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+        
+        // Optional: Check session timeout (24 hours)
+        const loginTime = sessionStorage.getItem('loginTime');
+        if (loginTime) {
+            const currentTime = new Date().getTime();
+            const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            
+            if (currentTime - parseInt(loginTime) > sessionDuration) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
     <!-- Header -->
     <header class="header" role="banner">
         <div class="container">
