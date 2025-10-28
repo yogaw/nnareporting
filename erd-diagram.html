@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFA-DMS Entity Relationship Diagram</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #0078D4;
+            --color-primary-light: #E6F2FB;
+            --color-text: #323130;
+            --color-text-light: #605E5C;
+            --color-border: #EDEBE9;
+            --color-background: #FFFFFF;
+            --color-entity: #2E8B57;
+            --color-entity-light: #E8F5E8;
+            --color-pk: #FF6B35;
+            --color-fk: #4A90E2;
+            --color-attribute: #6C757D;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--color-text);
+            line-height: 1.4;
+            background-color: #F8F9FA;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: var(--color-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--color-border);
+        }
+        
+        .title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+        
+        .erd-diagram {
+            width: 1500px;
+            height: 1000px;
+            position: relative;
+            margin: 0 auto;
+            background-color: #FAFBFC;
+            border-radius: 8px;
+            padding: 2rem;
+            border: 1px solid var(--color-border);
+        }
+        
+        .entity {
+            position: absolute;
+            background-color: var(--color-background);
+            border: 2px solid var(--color-entity);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-width: 200px;
+        }
+        
+        .entity-header {
+            background-color: var(--color-entity);
+            color: white;
+            padding: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            border-bottom: 2px solid var(--color-entity);
+        }
+        
+        .entity-body {
+            padding: 0;
+        }
+        
+        .attribute {
+            padding: 0.4rem 0.75rem;
+            border-bottom: 1px solid #E9ECEF;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .attribute:last-child {
+            border-bottom: none;
+        }
+        
+        .attribute.pk {
+            background-color: #FFF5F5;
+            border-left: 4px solid var(--color-pk);
+            font-weight: 600;
+        }
+        
+        .attribute.fk {
+            background-color: #F0F8FF;
+            border-left: 4px solid var(--color-fk);
+            font-weight: 500;
+        }
+        
+        .attribute-icon {
+            margin-right: 0.5rem;
+            font-size: 0.7rem;
+            width: 16px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .pk-icon {
+            color: var(--color-pk);
+        }
+        
+        .fk-icon {
+            color: var(--color-fk);
+        }
+        
+        .attr-icon {
+            color: var(--color-attribute);
+        }
+        
+        .relationship-line {
+            position: absolute;
+            height: 2px;
+            background-color: var(--color-text);
+            z-index: 1;
+        }
+        
+        .relationship-line::before,
+        .relationship-line::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-text);
+            border-radius: 50%;
+        }
+        
+        .relationship-line::before {
+            left: -4px;
+            top: -3px;
+        }
+        
+        .relationship-line::after {
+            right: -4px;
+            top: -3px;
+        }
+        
+        .one-to-many::after {
+            width: 0;
+            height: 0;
+            border-left: 8px solid var(--color-text);
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            border-radius: 0;
+            right: -8px;
+            top: -2px;
+        }
+        
+        .relationship-label {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            z-index: 2;
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+        }
+        
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 0.5rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .legend-icon {
+            width: 20px;
+            height: 16px;
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .legend-text {
+            font-size: 0.75rem;
+            color: var(--color-text);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-light);
+        }
+        
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .copyright {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Entity Relationship Diagram (ERD)</h1>
+            <p class="subtitle">SFA-DMS Database Schema - Sales Layer & Master Data Structure</p>
+        </header>
+        
+        <div class="erd-diagram">
+            <!-- HR_EMPLOYEE Entity -->
+            <div class="entity" style="top: 50px; left: 50px;">
+                <div class="entity-header">HR_EMPLOYEE</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        employee_id (PK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        employee_number
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        first_name
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        last_name
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        email
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        phone_number
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        position
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        hire_date
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SALESREP Entity -->
+            <div class="entity" style="top: 50px; left: 350px;">
+                <div class="entity-header">SALESREP</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        salesrep_id (PK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        employee_id (FK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        salesrep_number
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        territory_code
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        region_code
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        sales_target
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        start_date
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        end_date
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SALESREP_ASSIGNMENT Entity -->
+            <div class="entity" style="top: 50px; left: 700px;">
+                <div class="entity-header">SALESREP_ASSIGNMENT</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        assignment_id (PK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        salesrep_id (FK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        vendor_site_id (FK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        credit_type_id (FK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        assignment_date
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        effective_from
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        effective_to
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SALESREP_HIERARCHY Entity -->
+            <div class="entity" style="top: 400px; left: 350px;">
+                <div class="entity-header">SALESREP_HIERARCHY</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        hierarchy_id (PK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        salesrep_id (FK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        supervisor_salesrep_id (FK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        hierarchy_level
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        effective_from
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        effective_to
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SALES_CREDIT_TYPE Entity -->
+            <div class="entity" style="top: 50px; left: 1050px;">
+                <div class="entity-header">SALES_CREDIT_TYPE</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        credit_type_id (PK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        credit_type_code
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        credit_type_name
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        description
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        commission_rate
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VENDOR_SITE Entity -->
+            <div class="entity" style="top: 400px; left: 700px;">
+                <div class="entity-header">VENDOR_SITE</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        vendor_site_id (PK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        vendor_id (FK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        site_code
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        site_name
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        address
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        city
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        province
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        postal_code
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VENDOR Entity -->
+            <div class="entity" style="top: 700px; left: 700px;">
+                <div class="entity-header">VENDOR</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        vendor_id (PK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        vendor_code
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        vendor_name
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        vendor_type
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        contact_email
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        contact_phone
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MASTER_PRODUCT Entity -->
+            <div class="entity" style="top: 400px; left: 1050px;">
+                <div class="entity-header">MASTER_PRODUCT</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        product_id (PK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        product_code
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        product_name
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        category
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        brand
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        unit_of_measure
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        unit_price
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TARGET_VOLUME Entity -->
+            <div class="entity" style="top: 700px; left: 1050px;">
+                <div class="entity-header">TARGET_VOLUME</div>
+                <div class="entity-body">
+                    <div class="attribute pk">
+                        <span class="attribute-icon pk-icon">PK</span>
+                        target_id (PK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        salesrep_id (FK)
+                    </div>
+                    <div class="attribute fk">
+                        <span class="attribute-icon fk-icon">FK</span>
+                        product_id (FK)
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        target_period
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        target_volume
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        target_value
+                    </div>
+                    <div class="attribute">
+                        <span class="attribute-icon attr-icon">•</span>
+                        is_active
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Relationship Lines -->
+            <!-- HR_EMPLOYEE to SALESREP (1:N) -->
+            <div class="relationship-line one-to-many" style="top: 150px; left: 250px; width: 100px;"></div>
+            <div class="relationship-label" style="top: 135px; left: 275px;">1:N</div>
+            
+            <!-- SALESREP to SALESREP_ASSIGNMENT (1:N) -->
+            <div class="relationship-line one-to-many" style="top: 150px; left: 550px; width: 150px;"></div>
+            <div class="relationship-label" style="top: 135px; left: 600px;">1:N</div>
+            
+            <!-- SALESREP to SALESREP_HIERARCHY (1:N) -->
+            <div class="relationship-line one-to-many" style="top: 300px; left: 450px; width: 2px; height: 100px; transform: rotate(90deg); transform-origin: top left;"></div>
+            <div class="relationship-label" style="top: 340px; left: 460px;">1:N</div>
+            
+            <!-- SALESREP_ASSIGNMENT to SALES_CREDIT_TYPE (N:1) -->
+            <div class="relationship-line" style="top: 150px; left: 900px; width: 150px;"></div>
+            <div class="relationship-label" style="top: 135px; left: 950px;">N:1</div>
+            
+            <!-- SALESREP_ASSIGNMENT to VENDOR_SITE (N:1) -->
+            <div class="relationship-line" style="top: 250px; left: 800px; width: 2px; height: 150px; transform: rotate(90deg); transform-origin: top left;"></div>
+            <div class="relationship-label" style="top: 310px; left: 810px;">N:1</div>
+            
+            <!-- VENDOR_SITE to VENDOR (N:1) -->
+            <div class="relationship-line" style="top: 650px; left: 800px; width: 2px; height: 50px; transform: rotate(90deg); transform-origin: top left;"></div>
+            <div class="relationship-label" style="top: 670px; left: 810px;">N:1</div>
+            
+            <!-- SALESREP to TARGET_VOLUME (1:N) -->
+            <div class="relationship-line one-to-many" style="top: 300px; left: 550px; width: 500px; height: 2px; transform: rotate(45deg); transform-origin: top left;"></div>
+            <div class="relationship-label" style="top: 450px; left: 750px;">1:N</div>
+            
+            <!-- TARGET_VOLUME to MASTER_PRODUCT (N:1) -->
+            <div class="relationship-line" style="top: 650px; left: 1150px; width: 2px; height: 50px; transform: rotate(90deg); transform-origin: top left;"></div>
+            <div class="relationship-label" style="top: 670px; left: 1160px;">N:1</div>
+            
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-title">ERD Legend</div>
+                <div class="legend-item">
+                    <div class="legend-icon pk-icon">PK</div>
+                    <div class="legend-text">Primary Key (PK)</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon fk-icon">FK</div>
+                    <div class="legend-text">Foreign Key (FK)</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon attr-icon">•</div>
+                    <div class="legend-text">Attribute</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon">—●</div>
+                    <div class="legend-text">One-to-Many (1:N)</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon">●—●</div>
+                    <div class="legend-text">Many-to-One (N:1)</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p><strong>SFA-DMS Entity Relationship Diagram</strong></p>
+            <p>Database Schema Design for Sales Force Automation & Distribution Management System</p>
+            <p class="copyright">© 2025 Teman Bisnis Digital</p>
+        </footer>
+    </div>
+</body>
+</html>

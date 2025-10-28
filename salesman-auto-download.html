@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Auto Download — Salesman Stockist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #0891b2;
+            --color-primary-light: #e0f2fe;
+            --color-success: #16a34a;
+            --color-warning: #d97706;
+            --color-danger: #dc2626;
+            --color-text: #0f172a;
+            --color-text-light: #64748b;
+            --color-border: #e2e8f0;
+            --color-bg: #f1f5f9;
+            --color-white: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; background: var(--color-bg); color: var(--color-text); font-family: 'Inter', sans-serif; }
+
+        /* Mobile phone style container */
+        .phone {
+            width: 390px; /* typical mobile width */
+            max-width: 100%;
+            margin: 24px auto;
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(2, 6, 23, 0.08);
+        }
+
+        .status-bar {
+            height: 18px;
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--color-border);
+            background: var(--color-white);
+        }
+        .header .back {
+            width: 36px; height: 36px; border-radius: 10px;
+            border: 1px solid var(--color-border);
+            display: grid; place-items: center;
+            background: var(--color-bg);
+            cursor: pointer;
+        }
+        .header .title-wrap {
+            display: flex; flex-direction: column;
+        }
+        .title {
+            font-weight: 700; font-size: 16px;
+        }
+        .subtitle {
+            font-size: 12px; color: var(--color-text-light);
+        }
+
+        .content {
+            padding: 16px;
+        }
+
+        .info-card {
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 12px;
+            background: var(--color-white);
+            margin-bottom: 12px;
+        }
+        .info-row {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; margin: 6px 0;
+        }
+        .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 8px; border-radius: 999px; font-size: 12px;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-light);
+            background: var(--color-bg);
+        }
+
+        .form {
+            display: grid; gap: 10px; margin: 12px 0 16px 0;
+        }
+        .input {
+            display: grid; gap: 6px;
+        }
+        .input label { font-size: 12px; color: var(--color-text-light); }
+        .input input, .input select {
+            width: 100%; padding: 10px 12px; font-size: 14px;
+            border: 1px solid var(--color-border); border-radius: 10px;
+            background: var(--color-white);
+        }
+
+        .toggle-row {
+            display: flex; gap: 8px; align-items: center;
+            font-size: 13px; color: var(--color-text-light);
+        }
+        .toggle-row input { transform: scale(1.1); }
+
+        .button {
+            width: 100%; padding: 12px; border: none; border-radius: 12px;
+            font-weight: 600; font-size: 14px; cursor: pointer;
+            background: var(--color-primary); color: var(--color-white);
+        }
+        .button[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+        .datasets {
+            margin-top: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .dataset {
+            padding: 12px;
+            border-bottom: 1px solid var(--color-border);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: center;
+            background: var(--color-white);
+        }
+        .dataset:last-child { border-bottom: none; }
+        .dataset-title {
+            font-size: 14px; font-weight: 600;
+        }
+        .dataset-subtitle {
+            font-size: 12px; color: var(--color-text-light);
+        }
+
+        .status {
+            font-size: 12px;
+            padding: 6px 10px; border-radius: 999px;
+            border: 1px solid var(--color-border);
+            background: var(--color-bg);
+            color: var(--color-text-light);
+        }
+        .status.syncing { color: #0c4a6e; border-color: #bae6fd; background: #e0f2fe; }
+        .status.done { color: var(--color-success); border-color: #bbf7d0; background: #dcfce7; }
+        .status.error { color: var(--color-danger); border-color: #fecaca; background: #fee2e2; }
+
+        .progress {
+            margin-top: 12px;
+            padding: 12px; border: 1px solid var(--color-border); border-radius: 12px;
+            background: var(--color-white);
+        }
+        .progress-bar {
+            width: 100%; height: 10px; border-radius: 999px;
+            background: var(--color-bg); overflow: hidden; border: 1px solid var(--color-border);
+        }
+        .progress-fill {
+            height: 100%; width: 0%; background: var(--color-primary);
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            margin-top: 8px; font-size: 12px; color: var(--color-text-light);
+        }
+
+        .footer-actions {
+            margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+        }
+        .secondary-btn {
+            width: 100%; padding: 10px; border-radius: 10px; font-weight: 600;
+            background: var(--color-bg); border: 1px solid var(--color-border); color: var(--color-text);
+            cursor: pointer;
+        }
+
+        .hint {
+            font-size: 12px; color: var(--color-text-light); margin-top: 8px;
+        }
+
+        @media (max-width: 420px) {
+            .phone { border-radius: 0; margin: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Auth protection like other pages
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+        const loginTime = sessionStorage.getItem('loginTime');
+        if (loginTime) {
+            const currentTime = new Date().getTime();
+            const sessionDuration = 24 * 60 * 60 * 1000;
+            if (currentTime - parseInt(loginTime) > sessionDuration) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+
+    <div class="phone" role="application" aria-label="Auto Download untuk Salesman Stockist">
+        <div class="status-bar" aria-hidden="true"></div>
+        <div class="header">
+            <div class="back" onclick="window.location.href='index.html'" aria-label="Kembali ke Dashboard">←</div>
+            <div class="title-wrap">
+                <div class="title">Auto Download Data</div>
+                <div class="subtitle">Salesman Stockist • Siapkan tugas harian</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="info-card">
+                <div class="info-row">
+                    <div>Pengguna</div>
+                    <div class="badge" id="userBadge">NNA</div>
+                </div>
+                <div class="info-row">
+                    <div>Terakhir Sinkronisasi</div>
+                    <div class="badge" id="lastSyncBadge">Belum ada</div>
+                </div>
+            </div>
+
+            <div class="form" aria-label="Parameter Sinkronisasi">
+                <div class="input">
+                    <label for="nik">NIK Karyawan</label>
+                    <input id="nik" type="text" placeholder="Masukkan NIK" inputmode="numeric" autocomplete="off">
+                </div>
+                <div class="input">
+                    <label for="area">Area</label>
+                    <select id="area">
+                        <option value="">Pilih Area</option>
+                        <option>Bandung</option>
+                        <option>Jakarta</option>
+                        <option>Surabaya</option>
+                        <option>Medan</option>
+                        <option>Makassar</option>
+                    </select>
+                </div>
+                <div class="toggle-row">
+                    <input id="wifiOnly" type="checkbox">
+                    <label for="wifiOnly">Unduh via Wi‑Fi saja</label>
+                </div>
+                <button id="startBtn" class="button" onclick="startSync()">Mulai Sinkronisasi</button>
+            </div>
+
+            <div class="datasets" id="datasets" aria-live="polite" aria-label="Daftar dataset untuk diunduh">
+                <!-- Dataset items rendered via JS -->
+            </div>
+
+            <div class="progress" aria-label="Progres Sinkronisasi">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Menunggu mulai…</div>
+            </div>
+
+            <div class="footer-actions">
+                <button class="secondary-btn" onclick="resetSync()">Reset</button>
+                <button class="secondary-btn" onclick="viewLog()">Lihat Log</button>
+            </div>
+            <div class="hint">Sistem akan mengunduh otomatis semua data kunjungan & referensi per area berdasarkan NIK.</div>
+        </div>
+    </div>
+
+    <script>
+        const username = sessionStorage.getItem('username') || 'NNA';
+        document.getElementById('userBadge').textContent = username;
+
+        const datasets = [
+            { id: 'masterProduct', title: 'Master Product', source: 'DMS', type: 'master' },
+            { id: 'masterAssignment', title: 'Master Assignment', source: 'SFA', type: 'master' },
+            { id: 'targetVolume', title: 'Master Target Volume', source: 'DMS', type: 'master' },
+            { id: 'targetKSI', title: 'Master Target KSI', source: 'DMS', type: 'master' },
+            { id: 'spbSuggestion', title: 'Data Ref SPB Suggestion H+1 per Salesman', source: 'DMS', type: 'reference' },
+            { id: 'dailyVisits', title: 'Data Kunjungan Harian', source: 'SFA', type: 'operational' }
+        ];
+
+        let syncLog = [];
+        let inProgress = false;
+
+        function renderDatasets() {
+            const container = document.getElementById('datasets');
+            container.innerHTML = '';
+            datasets.forEach(ds => {
+                const row = document.createElement('div');
+                row.className = 'dataset';
+                row.id = `row-${ds.id}`;
+                row.innerHTML = `
+                    <div>
+                        <div class="dataset-title">${ds.title}</div>
+                        <div class="dataset-subtitle">Sumber: ${ds.source} • Tipe: ${ds.type}</div>
+                    </div>
+                    <div class="status" id="status-${ds.id}">Menunggu</div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function updateProgress(pct, text) {
+            document.getElementById('progressFill').style.width = `${pct}%`;
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function setStatus(id, statusClass, text) {
+            const el = document.getElementById(`status-${id}`);
+            el.className = `status ${statusClass}`;
+            el.textContent = text;
+        }
+
+        function startSync() {
+            if (inProgress) return;
+            const nik = document.getElementById('nik').value.trim();
+            const area = document.getElementById('area').value.trim();
+            if (!nik || !area) {
+                alert('Mohon isi NIK dan pilih Area terlebih dahulu.');
+                return;
+            }
+
+            inProgress = true;
+            document.getElementById('startBtn').disabled = true;
+            syncLog = [];
+            updateProgress(0, 'Memulai sinkronisasi…');
+
+            // Simulate sequential sync per dataset
+            let idx = 0;
+            function processNext() {
+                if (idx >= datasets.length) {
+                    inProgress = false;
+                    document.getElementById('startBtn').disabled = false;
+                    const now = new Date();
+                    document.getElementById('lastSyncBadge').textContent = now.toLocaleString('id-ID');
+                    updateProgress(100, 'Sinkronisasi selesai. Semua data siap.');
+                    sessionStorage.setItem('lastSyncAt', now.toISOString());
+                    return;
+                }
+
+                const ds = datasets[idx];
+                const pct = Math.round((idx / datasets.length) * 100);
+                updateProgress(pct, `Mengunduh: ${ds.title} (${ds.source})`);
+
+                setStatus(ds.id, 'syncing', 'Sedang mengunduh…');
+
+                // Simulated network delay and outcome
+                const delay = 800 + Math.random() * 900;
+                setTimeout(() => {
+                    // 90% success chance
+                    const success = Math.random() < 0.9;
+                    if (success) {
+                        setStatus(ds.id, 'done', 'Siap dipakai');
+                        syncLog.push(`[OK] ${ds.title} • NIK=${nik}, Area=${area}`);
+                    } else {
+                        setStatus(ds.id, 'error', 'Gagal — akan diulang');
+                        syncLog.push(`[ERR] ${ds.title} • NIK=${nik}, Area=${area}`);
+                    }
+                    idx++;
+                    processNext();
+                }, delay);
+            }
+            processNext();
+        }
+
+        function resetSync() {
+            datasets.forEach(ds => setStatus(ds.id, '', 'Menunggu'));
+            updateProgress(0, 'Menunggu mulai…');
+            document.getElementById('startBtn').disabled = false;
+            inProgress = false;
+        }
+
+        function viewLog() {
+            if (!syncLog.length) {
+                alert('Belum ada log sinkronisasi.');
+                return;
+            }
+            alert(syncLog.join('\n'));
+        }
+
+        // Initialize
+        renderDatasets();
+
+        // Restore last sync if available
+        const lastSyncAt = sessionStorage.getItem('lastSyncAt');
+        if (lastSyncAt) {
+            const dt = new Date(lastSyncAt);
+            document.getElementById('lastSyncBadge').textContent = dt.toLocaleString('id-ID');
+        }
+    </script>
+</body>
+</html>
