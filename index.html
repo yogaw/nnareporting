@@ -304,6 +304,65 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Accordion Styles */
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            padding: 1rem 0;
+            transition: background-color 0.2s;
+        }
+
+        .phase-header:hover {
+            background-color: var(--color-background-alt);
+            margin: 0 -1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .phase-header .section-title {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .phase-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .phase-toggle::after {
+            content: '▼';
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .phase-header.collapsed .phase-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .phase-content {
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .phase-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .section {
+            padding: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -323,6 +382,14 @@
                 sessionStorage.clear();
                 window.location.href = 'login.html';
             }
+        }
+
+        function togglePhase(phase) {
+            const header = event.currentTarget;
+            const content = document.getElementById(phase + '-content');
+
+            header.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
         }
     </script>
     <!-- Header -->
@@ -355,9 +422,12 @@
             
             <!-- Weekly Reports Section -->
             <section class="section" aria-labelledby="reports-title">
-                <h2 id="reports-title" class="section-title">Weekly Reports</h2>
-                
-                <div class="report-cards">
+                <div class="phase-header collapsed" onclick="togglePhase('alignment')">
+                    <h2 id="reports-title" class="section-title">01. Weekly Alignment Phase</h2>
+                    <span class="phase-toggle"></span>
+                </div>
+                <div class="phase-content collapsed" id="alignment-content">
+                    <div class="report-cards" style="margin-top: 1rem;">
                     <!-- Week 1 Report -->
                     <div class="report-card">
                         <a href="weeklyreport1.html">
@@ -516,6 +586,61 @@
                                 <button class="view-report-btn">View Report</button>
                             </div>
                         </a>
+                    </div>
+                    
+                    <!-- Week 10 Report -->
+                    <div class="report-card">
+                        <a href="weeklyreport10.html">
+                            <div class="report-card-header">
+                                <div class="report-card-title">Week 10 Report</div>
+                                <div class="report-card-period">29 Oktober - 04 November 2025</div>
+                            </div>
+                            <div class="report-card-content">
+                                <span class="report-card-status status-at-risk">At Risk</span>
+                                <div class="report-card-summary">
+                                    Feedback PRD masih berlangsung, keputusan strategis dari Project Owner NNA sangat dinantikan.
+                                </div>
+                            </div>
+                            <div class="report-card-footer">
+                                <span>Last updated: 04 November 2025</span>
+                                <button class="view-report-btn">View Report</button>
+                            </div>
+                        </a>
+                    </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Weekly Development Phase Section -->
+            <section class="section" aria-labelledby="development-title">
+                <div class="phase-header collapsed" onclick="togglePhase('development')">
+                    <h2 id="development-title" class="section-title">02. Weekly Development Phase</h2>
+                    <span class="phase-toggle"></span>
+                </div>
+                <div class="phase-content collapsed" id="development-content">
+                    <div class="report-cards" style="margin-top: 1rem;">
+                        <!-- Dev Week 1 Report -->
+                        <div class="report-card">
+                            <a href="weeklyreport-dev1.html">
+                                <div class="report-card-header">
+                                    <div class="report-card-title">Dev - December 25 Report</div>
+                                    <div class="report-card-period">01 Dec 25 - 30 Dec 25</div>
+                                </div>
+                                <div class="report-card-content">
+                                    <span class="report-card-status status-at-risk">At Risk</span>  
+                                    <div class="report-card-summary">
+                                        Development SFA-DMS sudah selesai 3 sprint. 
+                                        PRD Meta dalam proses final sign-off, sementara PRD Non-Meta masih tahap rework 
+                                        dan review. Development Meta dan sebagian Non-Meta sudah tersedia 
+                                        di staging untuk testing lanjutan.
+                                    </div>
+                                </div>
+                                <div class="report-card-footer">
+                                    <span>Last updated: 30 Dec 25</span>    
+                                    <button class="view-report-btn">View Report</button>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
