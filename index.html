@@ -363,6 +363,18 @@
         .section {
             padding: 1.5rem;
         }
+
+        /* Pulse animation for ongoing badge */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
     </style>
 </head>
 <body>
@@ -423,7 +435,7 @@
             <!-- Weekly Reports Section -->
             <section class="section" aria-labelledby="reports-title">
                 <div class="phase-header collapsed" onclick="togglePhase('alignment')">
-                    <h2 id="reports-title" class="section-title">01. Weekly Alignment Phase</h2>
+                    <h2 id="reports-title" class="section-title">01. Weekly Alignment Phase <span style="font-size: 0.75rem; margin-left: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background-color: var(--color-on-track-light); color: var(--color-on-track); font-weight: 600;">DONE</span></h2>
                     <span class="phase-toggle"></span>
                 </div>
                 <div class="phase-content collapsed" id="alignment-content">
@@ -612,12 +624,12 @@
             </section>
 
             <!-- Weekly Development Phase Section -->
-            <section class="section" aria-labelledby="development-title">
-                <div class="phase-header collapsed" onclick="togglePhase('development')">
-                    <h2 id="development-title" class="section-title">02. Weekly Development Phase</h2>
+            <section class="section" aria-labelledby="development-title" style="border: 2px solid var(--color-primary); box-shadow: 0 0 20px rgba(8, 145, 178, 0.3);">
+                <div class="phase-header" onclick="togglePhase('development')">
+                    <h2 id="development-title" class="section-title">02. Weekly Development Phase <span style="font-size: 0.75rem; margin-left: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background-color: var(--color-primary); color: white; font-weight: 600; animation: pulse 2s infinite;">ONGOING</span></h2>
                     <span class="phase-toggle"></span>
                 </div>
-                <div class="phase-content collapsed" id="development-content">
+                <div class="phase-content" id="development-content">
                     <div class="report-cards" style="margin-top: 1rem;">
                         <!-- Dev Week 1 Report -->
                         <div class="report-card">
