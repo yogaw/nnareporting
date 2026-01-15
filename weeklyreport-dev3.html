@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TemanBizz Dashboard - SFA-DMS Weekly Project Report (Development Phase)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #0891b2;
+            --color-primary-light: #e0f2fe;
+            --color-on-track: #16a34a;
+            --color-on-track-light: #dcfce7;
+            --color-at-risk: #d97706;
+            --color-at-risk-light: #fef3c7;
+            --color-off-track: #dc2626;
+            --color-off-track-light: #fee2e2;
+            --color-done: #0d9488;
+            --color-done-light: #ccfbf1;
+            --color-text: #1e293b;
+            --color-text-light: #64748b;
+            --color-border: #e2e8f0;
+            --color-background: #ffffff;
+            --color-background-alt: #f8fafc;
+            --color-section-title: #0f172a;
+
+            --color-severity-high: #dc2626;
+            --color-severity-high-light: rgba(220, 38, 38, 0.1);
+            --color-severity-medium: #d97706;
+            --color-severity-medium-light: rgba(217, 119, 6, 0.1);
+            --color-severity-low: #16a34a;
+            --color-severity-low-light: rgba(22, 163, 74, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+            color: var(--color-text);
+            line-height: 1.5;
+            background-color: #f1f5f9;
+            font-size: 16px;
+        }
+
+        @page { size: A4; margin: 1.5cm; }
+        @media print {
+            body { background-color: white; font-size: 12pt; }
+            .container { width: 100%; max-width: 100%; padding: 0; }
+            .header { position: static; box-shadow: none; }
+            .section { break-inside: avoid; page-break-inside: avoid; margin-bottom: 1.5cm; }
+            .no-print { display: none !important; }
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+
+        .header {
+            background-color: var(--color-background);
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header-content { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .header-title {
+            font-size: 1.25rem; font-weight: 700;
+            display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.5rem;
+        }
+        .project-logo { width: 3rem; height: 3rem; object-fit: contain; }
+        .header-meta { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%; }
+        .period { font-weight: 500; color: var(--color-text-light); font-size: 0.875rem; }
+        .last-updated { font-size: 0.75rem; color: var(--color-text-light); }
+
+        @media (min-width: 640px) {
+            .header { padding: 1.5rem; }
+            .header-content { flex-direction: row; justify-content: space-between; }
+            .header-title { font-size: 1.5rem; flex-direction: row; text-align: left; gap: 1rem; }
+            .project-logo { width: 4rem; height: 4rem; }
+            .header-meta { flex-direction: row; justify-content: flex-end; width: auto; gap: 1rem; }
+        }
+
+        .main-content { padding: 1.5rem 0; }
+        .section {
+            background-color: var(--color-background);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1rem; margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-section-title);
+            border-bottom: 2px solid var(--color-primary); padding-bottom: 0.5rem; display: inline-block;
+        }
+        @media (min-width: 640px) {
+            .main-content { padding: 2rem 0; }
+            .section { border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; }
+            .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; }
+        }
+
+        /* Highlights */
+        .highlights-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .highlights-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; } }
+        .highlight-card {
+            background-color: var(--color-background);
+            border-radius: 1rem; padding: 1.25rem;
+            border-left: 5px solid var(--color-primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .highlight-title { font-weight: 700; margin-bottom: 0.75rem; color: var(--color-primary); font-size: 1.125rem; }
+        .highlight-content p { margin-bottom: 0.5rem; }
+        .highlight-content ul { padding-left: 1.25rem; margin-top: 0.5rem; }
+        .highlight-content li { margin-bottom: 0.5rem; }
+
+        /* Task table */
+        .task-table-container { overflow-x: auto; margin: 0 -1rem; padding: 0 1rem; }
+        .task-table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: 0.75rem; }
+        @media (min-width: 640px) { .task-table-container { margin: 0; padding: 0; } .task-table { font-size: 0.875rem; } }
+        .task-table th {
+            background-color: var(--color-background-alt);
+            padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: var(--color-text);
+            border-bottom: 2px solid var(--color-border);
+        }
+        .task-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+        .task-table tr:hover { background-color: var(--color-background-alt); }
+        .status-chip {
+            display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px;
+            font-size: 0.75rem; font-weight: 500; white-space: nowrap;
+        }
+        .status-chip.done { background-color: var(--color-on-track-light); color: var(--color-on-track); }
+        .status-chip.in-progress { background-color: var(--color-primary-light); color: var(--color-primary); }
+        .status-chip.on-hold { background-color: var(--color-at-risk-light); color: var(--color-at-risk); }
+        .status-chip.not-started { background-color: var(--color-border); color: var(--color-text-light); }
+
+        /* Module table */
+        .module-section { margin-bottom: 1.5rem; }
+        .module-title { font-weight: 600; color: var(--color-text); margin-bottom: 0.75rem; font-size: 1rem; }
+
+        /* Risks */
+        .risk-list { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .risk-list { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); } }
+        .risk-item {
+            border: 1px solid var(--color-border); border-radius: 0.75rem; padding: 1rem;
+            background-color: var(--color-background);
+        }
+        .risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .risk-title { font-weight: 600; color: var(--color-text); }
+        .risk-severity { font-size: 0.75rem; font-weight: 600; padding: 0.125rem 0.5rem; border-radius: 9999px; }
+        .severity-high { background-color: var(--color-severity-high-light); color: var(--color-severity-high); }
+        .severity-medium { background-color: var(--color-severity-medium-light); color: var(--color-severity-medium); }
+        .severity-low { background-color: var(--color-severity-low-light); color: var(--color-severity-low); }
+        .risk-description { color: var(--color-text); font-size: 0.9rem; }
+
+        /* Next Steps */
+        .next-steps-container { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .next-steps-container { grid-template-columns: 1fr 1fr; } }
+        .next-steps-category { border: 1px solid var(--color-border); border-radius: 0.75rem; padding: 1rem; background: var(--color-background); }
+        .next-steps-category h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-section-title); }
+        .next-steps-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+        .next-step-item {
+            display: flex; align-items: flex-start; gap: 0.5rem;
+            border: 1px dashed var(--color-border); border-radius: 0.5rem; padding: 0.5rem 0.75rem; background: var(--color-background-alt);
+        }
+        .next-step-checkbox { width: 1rem; height: 1rem; border: 2px solid var(--color-border); border-radius: 0.25rem; margin-top: 0.25rem; }
+        .next-step-content { flex: 1; }
+        .next-step-title { font-weight: 600; }
+        .next-step-description { font-size: 0.875rem; color: var(--color-text-light); }
+
+        /* Empty state for task table */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--color-text-light);
+        }
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        .empty-state-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .empty-state-description {
+            font-size: 0.875rem;
+        }
+
+        /* Additional notes section */
+        .additional-notes {
+            background-color: var(--color-background-alt);
+            border-left: 4px solid var(--color-at-risk);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .additional-notes h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-at-risk);
+            margin-bottom: 0.75rem;
+        }
+        .additional-notes p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .additional-notes ul {
+            padding-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+        .additional-notes li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Back button */
+        .back-button {
+            display: inline-flex;
+            align-items: center,
+            gap: 0.5rem;
+            background-color: var(--color-background);
+            border: 1px solid var(--color-border);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+        .back-button:hover {
+            background-color: var(--color-background-alt);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Check authentication before loading page content
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        // Optional: Check session timeout (24 hours)
+        const loginTime = sessionStorage.getItem('loginTime');
+        if (loginTime) {
+            const currentTime = new Date().getTime();
+            const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+            if (currentTime - parseInt(loginTime) > sessionDuration) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-title">
+                    <img src="assets/images/project-logo.png" alt="Project Logo" class="project-logo" aria-label="Project logo">
+                    <div>
+                        <div>Pengembangan Aplikasi SFA-DMS dengan MileApp</div>
+                        <div>Weekly Project Report - Development Phase</div>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <div class="period">Periode: 08 Januari 2026 - 15 Januari 2026</div>
+                    <div class="last-updated">Last updated: 15 Januari 2026</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content" role="main">
+        <div class="container">
+            <a href="index.html" class="back-button no-print">← Back to Dashboard</a>
+
+            <!-- 1. Progress & Highlights -->
+            <section class="section">
+                <h2 class="section-title">1. Progress & Highlights</h2>
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <div class="highlight-title">Integrasi & Progress internal IT NNA</div>
+                        <div class="highlight-content">
+                            <p><strong>1. Integrasi META (Oracle EBS)</strong></p>
+                            <p><strong>2. Integrasi HRIS (Pro-Int)</strong></p>
+                            <p>Belum ada update status</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">PRD Review & Sign Off (Meta)</div>
+                        <div class="highlight-content">
+                            <p><em>Context: Dokumentasi PRD dari MileApp</em></p>
+                            <p>Email terakhir dengan MileApp, menunggu NNA untuk tanda tangan</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">PRD Review & Sign Off (Non-Meta)</div>
+                        <div class="highlight-content">
+                            <p><em>Context: Dokumentasi PRD dari MileApp</em></p>
+                            <p>Per 15 Januari 2026:</p>
+                            <ul>
+                                <li>PRD Roles, Users masih berubah secara dinamis</li>
+                            </ul>
+                            <p><strong>Action:</strong> Menunggu PRD selesai berubah lalu review dan siapkan notes dari sisi TemanBis untuk NNA team.</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">PRD Persiapan Salesman</div>
+                        <div class="highlight-content">
+                            <p>Untuk development Persiapan</p>
+                            <p>Belum ada progress</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">Development</div>
+                        <div class="highlight-content">
+                            <p><em>Context: Click Up dari MileApp</em></p>
+                            <p>Tidak terupdate dari sisi MileApp</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">Testing</div>
+                        <div class="highlight-content">
+                            <p><em>Context: Checklist Testing PT NNA</em></p>
+                            <p>Dari Catatan Sprint 4, tidak ada update.</p>
+                            <p>Catatan Sprint 5, tidak terupdate.</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-card">
+                        <div class="highlight-title">Deployment</div>
+                        <div class="highlight-content">
+                            <p>Masih development ke staging untuk kebutuhan testing di sisi user</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Progress Update & Task Status -->
+            <section class="section">
+                <h2 class="section-title">2. Timeline Tracking & Task Status</h2>
+                <div class="task-table-container">
+                    <table class="task-table" aria-label="Task status table">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>PIC</th>
+                                <th>Start</th>
+                                <th>Target Selesai</th>
+                                <th>Aktual Selesai</th>
+                                <th>Status</th>
+                                <th>Notes / Alasan Keterlambatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Rework PRD Non Meta</td>
+                                <td>MileApp</td>
+                                <td>29 Dec 25</td>
+                                <td>belum ada eta</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>PRD Master Hubs & Roles sudah diupdate, PRD Master Users masih berubah secara dinamis per 15 Jan 26</td>
+                            </tr>
+                            <tr>
+                                <td>Rework PRD lainnya</td>
+                                <td>MileApp</td>
+                                <td>29 Dec 25</td>
+                                <td>belum ada eta</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Menunggu PRD lainnya selain Hubs, Roles, Users</td>
+                            </tr>
+                            <tr>
+                                <td>Sign Off (Teman Bis) PRD Non Meta</td>
+                                <td>Teman Bis</td>
+                                <td>29 Dec 25</td>
+                                <td>belum ada eta</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Master Hubs selesai, Master Roles & Users masih berubah secara dinamis. Menunggu PRD selesai berubah</td>
+                            </tr>
+                            <tr>
+                                <td>Sign Off (NNA Team) PRD Non Meta</td>
+                                <td>NNA (IT & Sales)</td>
+                                <td>29 Dec 25</td>
+                                <td>belum ada eta</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Master Hubs selesai, Master Roles & Users masih berubah secara dinamis. Dependency: rework PRD oleh MileApp & sign off Teman Bis</td>
+                            </tr>
+                            <tr>
+                                <td>Tanda Tangan dan lock PRD Meta</td>
+                                <td>NNA (IT & Sales)</td>
+                                <td>29 Dec 25</td>
+                                <td>31 Dec 25</td>
+                                <td>-</td>
+                                <td><span class="status-chip on-hold">On Hold</span></td>
+                                <td>Email terakhir dengan MileApp, menunggu NNA untuk tanda tangan</td>
+                            </tr>
+                            <tr>
+                                <td>Development: Meta</td>
+                                <td>MileApp & IT NNA</td>
+                                <td>1 Dec 2025</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Tidak terupdate dari sisi MileApp per 15 Jan 26</td>
+                            </tr>
+                            <tr>
+                                <td>Development: Non Meta</td>
+                                <td>MileApp & IT NNA</td>
+                                <td>8 Dec 2025</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip in-progress">In Progress</span></td>
+                                <td>Paralel dengan sign off PRD, feedback loop dengan user. Tidak terupdate dari sisi MileApp per 15 Jan 26</td>
+                            </tr>
+                            <tr>
+                                <td>Development: Persiapan Salesman</td>
+                                <td>MileApp</td>
+                                <td>15 Dec 2025</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip not-started">Not Started</span></td>
+                                <td>Belum ada progress</td>
+                            </tr>
+                            <tr>
+                                <td>Development: Kunjungan</td>
+                                <td>MileApp</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip not-started">Not Started</span></td>
+                                <td>Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Development: Settlement</td>
+                                <td>MileApp</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip not-started">Not Started</span></td>
+                                <td>Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Development: Supervisory App</td>
+                                <td>MileApp</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip not-started">Not Started</span></td>
+                                <td>Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Development: Marketing</td>
+                                <td>MileApp</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip not-started">Not Started</span></td>
+                                <td>Pending</td>
+                            </tr>
+                            <tr>
+                                <td>Integrasi META (Oracle EBS)</td>
+                                <td>IT NNA</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip on-hold">On Hold</span></td>
+                                <td>Belum ada update status</td>
+                            </tr>
+                            <tr>
+                                <td>Integrasi HRIS (Pro-Int)</td>
+                                <td>IT NNA</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><span class="status-chip on-hold">On Hold</span></td>
+                                <td>Belum ada update status</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. Risks & Issues -->
+            <section class="section">
+                <h2 class="section-title">3. Risiko / Hambatan</h2>
+                <div class="risk-list">
+                    <div class="risk-item">
+                        <div class="risk-header">
+                            <div class="risk-title">⚠ Pending "rework PRD" oleh MileApp</div>
+                            <div class="risk-severity severity-high">High</div>
+                        </div>
+                        <div class="risk-description">
+                            Proses rework PRD oleh MileApp masih pending, menyebabkan keterlambatan pada sign-off dan mempengaruhi timeline development.
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-header">
+                            <div class="risk-title">⚠ Konsistensi "freeze time" staging release untuk testing lebih baik</div>
+                            <div class="risk-severity severity-medium">Medium</div>
+                        </div>
+                        <div class="risk-description">
+                            Periode freeze untuk testing masih belum teratur, perlu disepakati schedule yang lebih jelas untuk staging release agar testing bisa dilakukan secara efektif.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Next Steps -->
+            <section class="section">
+                <h2 class="section-title">4. Next Steps</h2>
+                <div class="next-steps-container">
+                    <div class="next-steps-category">
+                        <h3>Terkait Prioritas Saat Ini</h3>
+                        <ul class="next-steps-list">
+                            <li class="next-step-item">
+                                <div class="next-step-checkbox"></div>
+                                <div class="next-step-content">
+                                    <div class="next-step-title">Tanggapan resmi dari MileApp dan Project Management NNA</div>
+                                    <div class="next-step-description">Dari email terakhir "Persetujuan Product Requirement Document (PRD)" dan follow up hasil weekly pada tanggal 12 Januari 2026</div>
+                                </div>
+                            </li>
+                            <li class="next-step-item">
+                                <div class="next-step-checkbox"></div>
+                                <div class="next-step-content">
+                                    <div class="next-step-title">Melanjutkan Sign Off PRD yang sudah dirework oleh TemanBis</div>
+                                    <div class="next-step-description">Sebagai layer pertama untuk PRD-PRD yang sudah selesai diprovide oleh MileApp</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="section" style="margin-top: 2rem; text-align: center;">
+        <div class="container">
+            <p style="font-size: 0.875rem; color: var(--color-text-light);">
+                &copy; 2026 Teman Bisnis Digital.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
