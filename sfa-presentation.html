@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFA Development - Internal Platform Strategy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #051c2c;
+            --color-primary-light: #0a2a40;
+            --color-accent: #c49a2c;
+            --color-accent-light: #f5e6c8;
+            --color-success: #2e7d32;
+            --color-success-light: #e8f5e9;
+            --color-danger: #b71c1c;
+            --color-danger-light: #ffebee;
+            --color-warning: #e65100;
+            --color-warning-light: #fff3e0;
+            --color-text: #212121;
+            --color-text-secondary: #546e7a;
+            --color-text-muted: #90a4ae;
+            --color-border: #e0e0e0;
+            --color-background: #ffffff;
+            --color-background-alt: #f5f5f5;
+            --color-surface: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--color-text);
+            line-height: 1.5;
+            background-color: var(--color-background);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-primary);
+            z-index: 1000;
+            padding: 0 2rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .progress-bar {
+            width: 180px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--color-accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .slide-counter {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Slide Container */
+        .slides-container {
+            padding-top: 56px;
+        }
+
+        /* Individual Slide */
+        .slide {
+            min-height: calc(100vh - 56px);
+            padding: 4rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .slide:last-child {
+            border-bottom: none;
+        }
+
+        .slide:nth-child(even) {
+            background: var(--color-background);
+        }
+
+        .slide:nth-child(odd) {
+            background: var(--color-background-alt);
+        }
+
+        .slide-content {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Slide Number */
+        .slide-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 0.625rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        /* Typography */
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .section-title-accent {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-accent);
+            display: inline-block;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .card-header {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .slide {
+                padding: 2rem 1.5rem;
+            }
+
+            .slide-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* List Styles */
+        .content-list {
+            list-style: none;
+        }
+
+        .content-list li {
+            padding: 0.625rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+            font-size: 0.9375rem;
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .content-list li:last-child {
+            border-bottom: none;
+        }
+
+        .content-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            width: 4px;
+            height: 4px;
+            background: var(--color-accent);
+        }
+
+        /* Status Cards */
+        .status-card {
+            padding: 1.25rem;
+            border-left: 3px solid;
+        }
+
+        .status-card.problem {
+            background: var(--color-danger-light);
+            border-color: var(--color-danger);
+        }
+
+        .status-card.success {
+            background: var(--color-success-light);
+            border-color: var(--color-success);
+        }
+
+        .status-card.warning {
+            background: var(--color-warning-light);
+            border-color: var(--color-warning);
+        }
+
+        .status-card.info {
+            background: #e3f2fd;
+            border-color: #1565c0;
+        }
+
+        .status-card h4 {
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            color: var(--color-text);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--color-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .highlight-box.accent {
+            background: var(--color-accent);
+            color: var(--color-primary);
+        }
+
+        .highlight-box h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .highlight-box p {
+            font-size: 0.9375rem;
+            opacity: 0.9;
+        }
+
+        .highlight-box.accent p {
+            opacity: 1;
+        }
+
+        /* Comparison Box */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .comparison-side {
+            padding: 1.5rem;
+        }
+
+        .comparison-from {
+            background: var(--color-danger-light);
+            border-left: 3px solid var(--color-danger);
+        }
+
+        .comparison-to {
+            background: var(--color-success-light);
+            border-left: 3px solid var(--color-success);
+        }
+
+        .comparison-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--color-text-muted);
+            font-weight: 300;
+        }
+
+        .comparison-title {
+            font-weight: 700;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-from .comparison-title {
+            color: var(--color-danger);
+        }
+
+        .comparison-to .comparison-title {
+            color: var(--color-success);
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-divider {
+                transform: rotate(90deg);
+                padding: 1rem 0;
+            }
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--color-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            border: 2px solid var(--color-background);
+        }
+
+        .timeline-content {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            padding: 1.25rem;
+        }
+
+        .timeline-phase {
+            font-weight: 600;
+            color: var(--color-accent);
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-primary);
+        }
+
+        /* Milestone Container */
+        .milestone-container {
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+        }
+
+        .milestone-header {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .milestone-month {
+            padding: 0.75rem 1rem;
+            background: var(--color-primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        .milestone-month.span-5 {
+            flex: 5;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .milestone-body {
+            display: flex;
+        }
+
+        .milestone-col {
+            padding: 1.25rem;
+            border-right: 1px solid var(--color-border);
+        }
+
+        .milestone-col.wide {
+            flex: 5;
+            border-right: none;
+        }
+
+        .milestone-card {
+            height: 100%;
+        }
+
+        .milestone-card.foundation {
+            min-width: 180px;
+        }
+
+        .milestone-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .milestone-title {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .milestone-list {
+            list-style: none;
+        }
+
+        .milestone-list li {
+            font-size: 0.8125rem;
+            color: var(--color-text);
+            padding: 0.375rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .milestone-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            width: 4px;
+            height: 4px;
+            background: var(--color-accent);
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .module-item {
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            padding: 0.875rem 1rem;
+            text-align: center;
+        }
+
+        .module-name {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .module-sub {
+            display: block;
+            font-size: 0.6875rem;
+            color: var(--color-text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .module-item.highlight {
+            background: var(--color-accent-light);
+            border-color: var(--color-accent);
+        }
+
+        .module-item.highlight .module-name {
+            color: var(--color-accent);
+        }
+
+        /* Scope Diagram */
+        .scope-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .scope-layer {
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+        }
+
+        .scope-layer .layer-label {
+            padding: 0.5rem 1rem;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: white;
+            background: var(--color-primary);
+        }
+
+        .scope-layer .layer-content {
+            padding: 1rem;
+        }
+
+        .scope-layer.users .layer-label {
+            background: var(--color-text-secondary);
+        }
+
+        .scope-layer.application .layer-label {
+            background: var(--color-primary);
+        }
+
+        .scope-layer.integration .layer-label {
+            background: var(--color-accent);
+            color: var(--color-primary);
+        }
+
+        .scope-layer.infrastructure .layer-label {
+            background: var(--color-success);
+        }
+
+        .scope-layer.data .layer-label {
+            background: #1565c0;
+        }
+
+        .scope-layer.external .layer-label {
+            background: var(--color-text-muted);
+        }
+
+        .scope-layer.external.outscope {
+            opacity: 0.7;
+        }
+
+        .scope-layer.external.outscope .layer-content {
+            background: repeating-linear-gradient(
+                45deg,
+                var(--color-background-alt),
+                var(--color-background-alt) 10px,
+                var(--color-background) 10px,
+                var(--color-background) 20px
+            );
+        }
+
+        .users-content {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .user-box {
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .app-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .app-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .app-group.secondary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .app-box {
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            padding: 0.875rem 1rem;
+            flex: 1;
+        }
+
+        .app-box.primary {
+            background: var(--color-primary-light);
+            border-color: var(--color-primary);
+        }
+
+        .app-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .app-subtitle {
+            font-size: 0.6875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .app-modules {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+        }
+
+        .app-modules span {
+            background: white;
+            border: 1px solid var(--color-border);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.625rem;
+            font-weight: 500;
+        }
+
+        .proxy-box {
+            background: var(--color-accent-light);
+            border: 2px solid var(--color-accent);
+            padding: 1rem;
+        }
+
+        .proxy-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .proxy-desc {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .proxy-desc span {
+            background: white;
+            border: 1px solid var(--color-accent);
+            padding: 0.375rem 0.75rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--color-primary);
+        }
+
+        .infra-group, .external-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .infra-box, .external-box {
+            flex: 1;
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            padding: 0.75rem;
+        }
+
+        .infra-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .infra-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+        }
+
+        .infra-items span {
+            background: white;
+            border: 1px solid var(--color-border);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.625rem;
+        }
+
+        .external-box {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            background: var(--color-background-alt);
+            border: 1px dashed var(--color-border);
+            padding: 0.75rem;
+        }
+
+        .scope-layer.outscope {
+            opacity: 0.75;
+        }
+
+        .scope-layer.outscope .layer-content {
+            background: repeating-linear-gradient(
+                135deg,
+                var(--color-surface),
+                var(--color-surface) 5px,
+                var(--color-background-alt) 5px,
+                var(--color-background-alt) 10px
+            );
+        }
+
+        .data-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .data-box {
+            flex: 1;
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            padding: 0.875rem 1rem;
+        }
+
+        .data-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .data-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+        }
+
+        .data-items span {
+            background: white;
+            border: 1px solid var(--color-border);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.625rem;
+            font-weight: 500;
+        }
+
+        .scope-arrow {
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 1rem;
+            padding: 0.25rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .app-group {
+                flex-direction: column;
+            }
+
+            .app-group.secondary {
+                grid-template-columns: 1fr;
+            }
+
+            .infra-group, .external-group {
+                flex-direction: column;
+            }
+
+            .users-content {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .milestone-header,
+            .milestone-body {
+                flex-direction: column;
+            }
+
+            .milestone-month.span-5 {
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.3);
+            }
+
+            .milestone-col {
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Team Structure */
+        .team-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .team-role {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            padding: 0.875rem 1.25rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .team-role.lead {
+            border-color: var(--color-primary);
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .team-structure {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .leadership-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .leadership-row .team-role {
+            flex: 1;
+            text-align: center;
+        }
+
+        .team-role.accent {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: var(--color-primary);
+        }
+
+        .role-sub {
+            font-size: 0.625rem;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 480px) {
+            .leadership-row {
+                flex-direction: column;
+            }
+        }
+
+        .engineering-box {
+            border: 2px solid var(--color-primary);
+            background: var(--color-surface);
+        }
+
+        .engineering-title {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.625rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .engineering-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.75rem;
+        }
+
+        .eng-role {
+            background: var(--color-background-alt);
+            border: 1px solid var(--color-border);
+            padding: 0.625rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .eng-role.lead {
+            background: var(--color-accent-light);
+            border-color: var(--color-accent);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .engineering-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Budget Grid */
+        .budget-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .budget-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+        }
+
+        .budget-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .budget-header .budget-number {
+            width: 24px;
+            height: 24px;
+            background: white;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .budget-title {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .budget-body {
+            padding: 1rem;
+        }
+
+        .budget-desc {
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px dashed var(--color-border);
+        }
+
+        .budget-desc p {
+            font-size: 0.75rem;
+            color: var(--color-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .budget-desc p:last-child {
+            margin-bottom: 0;
+        }
+
+        .budget-note {
+            font-style: italic;
+            color: var(--color-text-secondary);
+        }
+
+        .budget-items {
+            margin-bottom: 0.75rem;
+        }
+
+        .budget-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.75rem;
+        }
+
+        .budget-row:last-child {
+            border-bottom: none;
+        }
+
+        .budget-row span:first-child {
+            color: var(--color-text);
+        }
+
+        .budget-placeholder {
+            font-family: 'Courier New', monospace;
+            color: var(--color-accent);
+            font-weight: 600;
+            font-size: 0.6875rem;
+            background: var(--color-accent-light);
+            padding: 0.125rem 0.375rem;
+        }
+
+        .budget-placeholder.total {
+            font-size: 0.75rem;
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .budget-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--color-background-alt);
+            border: 2px solid var(--color-primary);
+            margin-top: 0.5rem;
+        }
+
+        .budget-total span:first-child {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .budget-summary {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            padding: 1.25rem;
+            background: var(--color-primary);
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.375rem;
+        }
+
+        .summary-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 900px) {
+            .budget-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .budget-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+        }
+
+        .budget-content h4 {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            color: var(--color-primary);
+        }
+
+        .budget-content p {
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Next Steps */
+        .steps-list {
+            counter-reset: step;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            counter-increment: step;
+            width: 32px;
+            height: 32px;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8125rem;
+            flex-shrink: 0;
+        }
+
+        .step-number::before {
+            content: counter(step);
+        }
+
+        .step-content h4 {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            margin-bottom: 0.25rem;
+            color: var(--color-primary);
+        }
+
+        .step-content p {
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Strategic Tags */
+        .strategic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .strategic-tag {
+            background: white;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            padding: 0.625rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Title Slide Special */
+        .slide.title-slide {
+            background: var(--color-primary);
+            color: white;
+            text-align: center;
+        }
+
+        .slide.title-slide .slide-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .slide.title-slide .slide-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.125rem;
+        }
+
+        .slide.title-slide .slide-number {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Divider line */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: var(--color-accent);
+            margin: 1.5rem 0;
+        }
+
+        .divider.center {
+            margin: 1.5rem auto;
+        }
+
+        /* Executive Flow */
+        .exec-flow {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            margin-top: 1rem;
+        }
+
+        .exec-item {
+            flex: 1;
+            padding: 1.5rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+        }
+
+        .exec-item.problem {
+            background: var(--color-danger-light);
+            border-color: var(--color-danger);
+        }
+
+        .exec-item.recommendation {
+            background: var(--color-success-light);
+            border-color: var(--color-success);
+        }
+
+        .exec-item.impact {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+
+        .exec-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .exec-item.impact .exec-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .exec-content p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .exec-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .exec-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            padding: 0 0.5rem;
+            background: var(--color-background-alt);
+        }
+
+        @media (max-width: 1024px) {
+            .exec-flow {
+                flex-direction: column;
+            }
+
+            .exec-arrow {
+                padding: 0.75rem 0;
+                transform: rotate(90deg);
+                align-self: center;
+            }
+        }
+
+        /* Problem Matrix */
+        .problem-matrix {
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+        }
+
+        .problem-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 100px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .problem-row:last-child {
+            border-bottom: none;
+        }
+
+        .problem-row.header {
+            background: var(--color-primary);
+        }
+
+        .problem-row.header .problem-cell {
+            color: white;
+            font-weight: 700;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .problem-cell {
+            padding: 1rem 1.25rem;
+            font-size: 0.875rem;
+            border-right: 1px solid var(--color-border);
+        }
+
+        .problem-cell:last-child {
+            border-right: none;
+        }
+
+        .problem-cell.area {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .problem-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--color-accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .severity-high {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--color-danger);
+            color: white;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .severity-medium {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--color-warning);
+            color: white;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 768px) {
+            .problem-row {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-cell {
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+            }
+        }
+
+        /* Insight Grid */
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .insight-card {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+        }
+
+        .insight-card.highlight {
+            background: var(--color-danger-light);
+            border-color: var(--color-danger);
+            grid-column: span 2;
+        }
+
+        .insight-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .insight-card.highlight .insight-icon {
+            background: var(--color-danger);
+        }
+
+        .insight-body h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            color: var(--color-primary);
+        }
+
+        .insight-body p {
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .insight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .insight-card.highlight {
+                grid-column: span 1;
+            }
+        }
+
+        /* Key Takeaway */
+        .key-takeaway {
+            margin-top: 2rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--color-primary);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .key-takeaway-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            white-space: nowrap;
+        }
+
+        .key-takeaway-content {
+            font-size: 0.9375rem;
+            color: white;
+            line-height: 1.5;
+        }
+
+        /* Transformation Container */
+        .transformation-container {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            margin-top: 1rem;
+        }
+
+        .transform-from, .transform-to {
+            flex: 1;
+            border: 1px solid var(--color-border);
+        }
+
+        .transform-from {
+            background: var(--color-danger-light);
+        }
+
+        .transform-to {
+            background: var(--color-success-light);
+        }
+
+        .transform-header {
+            padding: 0.875rem 1.25rem;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .transform-from .transform-header {
+            background: var(--color-danger);
+            color: white;
+            border-color: var(--color-danger);
+        }
+
+        .transform-to .transform-header {
+            background: var(--color-success);
+            color: white;
+            border-color: var(--color-success);
+        }
+
+        .transform-body {
+            padding: 1.25rem;
+        }
+
+        .transform-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.625rem 0;
+            font-size: 0.875rem;
+            color: var(--color-text);
+        }
+
+        .transform-x {
+            color: var(--color-danger);
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .transform-box {
+            background: var(--color-primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .transform-box-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .transform-principles {
+            margin-top: 1rem;
+        }
+
+        .principle-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            color: var(--color-text);
+        }
+
+        .principle-check {
+            color: var(--color-success);
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .transform-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
+            background: var(--color-background);
+        }
+
+        .arrow-line {
+            width: 60px;
+            height: 2px;
+            background: var(--color-accent);
+            position: relative;
+        }
+
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 6px solid transparent;
+            border-left-color: var(--color-accent);
+        }
+
+        .arrow-text {
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .transformation-container {
+                flex-direction: column;
+            }
+
+            .transform-arrow {
+                padding: 1rem 0;
+                flex-direction: row;
+            }
+
+            .arrow-line {
+                width: 2px;
+                height: 40px;
+            }
+
+            .arrow-line::after {
+                right: 50%;
+                top: auto;
+                bottom: 0;
+                transform: translateX(50%);
+                border: 6px solid transparent;
+                border-top-color: var(--color-accent);
+                border-left-color: transparent;
+            }
+
+            .arrow-text {
+                margin-top: 0;
+                margin-left: 0.75rem;
+            }
+        }
+
+        /* Principle Cards */
+        .principle-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+        }
+
+        .principle-card .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+            line-height: 1;
+        }
+
+        .principle-card h4 {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .principle-card p {
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Key Insight Box */
+        .key-insight {
+            background: var(--color-accent-light);
+            border-left: 3px solid var(--color-accent);
+            padding: 1.25rem 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .key-insight-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight p {
+            font-size: 0.9375rem;
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        /* Flow diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1.5rem 0;
+        }
+
+        .flow-step {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .flow-arrow {
+            color: var(--color-text-muted);
+            font-weight: 300;
+        }
+
+        /* Conclusion highlight */
+        .conclusion-box {
+            background: var(--color-primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .conclusion-box.accent {
+            background: var(--color-danger);
+        }
+
+        .conclusion-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .conclusion-text {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav {
+                display: none;
+            }
+
+            .slides-container {
+                padding-top: 0;
+            }
+
+            .slide {
+                min-height: auto;
+                page-break-after: always;
+                padding: 2rem;
+            }
+
+            .slide-number {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="nav-brand">SFA Internal Development</div>
+            <div class="nav-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="slide-counter"><span id="currentSlide">1</span> / 14</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="slides-container">
+        <!-- SLIDE 1 - Title -->
+        <section class="slide title-slide" id="slide1">
+            <span class="slide-number">01</span>
+            <div class="slide-content">
+                <h1 class="slide-title">Pengembangan Internal<br>Sales Force Automation (SFA)</h1>
+                <div class="divider center"></div>
+                <p class="slide-subtitle">Meningkatkan Kontrol, Efisiensi, dan Agility<br>Operasional Sales dan Distribusi</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 2 - Executive Summary -->
+        <section class="slide" id="slide2">
+            <span class="slide-number">02</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Ringkasan Eksekutif</h2>
+                <div class="divider"></div>
+                <div class="exec-flow">
+                    <div class="exec-item">
+                        <div class="exec-label">Situasi</div>
+                        <div class="exec-content">
+                            <p>Implementasi SFA bergantung pada vendor saja. Integrasi dan pengembangan tidak berjalan optimal.</p>
+                        </div>
+                    </div>
+                    <div class="exec-arrow">&rarr;</div>
+                    <div class="exec-item problem">
+                        <div class="exec-label">Komplikasi</div>
+                        <div class="exec-content">
+                            <p>Dependency tinggi terhadap vendor</p>
+                            <p>Governance dan ownership belum jelas</p>
+                            <p>Kapabilitas IT internal belum memadai</p>
+                        </div>
+                    </div>
+                    <div class="exec-arrow">&rarr;</div>
+                    <div class="exec-item recommendation">
+                        <div class="exec-label">Rekomendasi</div>
+                        <div class="exec-content">
+                            <p>Membangun SFA internal secara bertahap dengan struktur yang lebih terkontrol</p>
+                        </div>
+                    </div>
+                    <div class="exec-arrow">&rarr;</div>
+                    <div class="exec-item impact">
+                        <div class="exec-label">Dampak</div>
+                        <div class="exec-content">
+                            <p>Kontrol penuh terhadap sistem</p>
+                            <p>Iterasi lebih cepat</p>
+                            <p>Efisiensi jangka panjang</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3 - Why This Matters Now -->
+        <section class="slide" id="slide3">
+            <span class="slide-number">03</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Mengapa Ini Penting Sekarang</h2>
+                <div class="divider"></div>
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-header">Kompleksitas Meningkat</div>
+                        <ul class="content-list">
+                            <li>Sales, distribusi, dan collection semakin kompleks</li>
+                            <li>Kebutuhan perubahan dari bisnis semakin cepat</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Kondisi Sistem Saat Ini</div>
+                        <ul class="content-list">
+                            <li><strong>SFA:</strong> Vendor</li>
+                            <li><strong>Integrasi dan Core:</strong> Vendor</li>
+                            <li><strong>IT internal:</strong> Sebagai penghubung</li>
+                        </ul>
+                    </div>
+                    <div class="status-card warning">
+                        <h4>Gap yang Terjadi</h4>
+                        <ul class="content-list" style="margin-top: 0.5rem;">
+                            <li>Sistem tidak cukup fleksibel untuk kebutuhan lapangan</li>
+                            <li>Banyak dependency antar vendor dan knowledge IT internal</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="conclusion-box">
+                    <div class="conclusion-label">Result</div>
+                    <div class="conclusion-text">Sistem berjalan, namun <strong>tidak scalable</strong></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4 - Current System Landscape -->
+        <section class="slide" id="slide4">
+            <span class="slide-number">04</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Lanskap Sistem Saat Ini</h2>
+                <div class="divider"></div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">Current Setup</div>
+                        <ul class="content-list">
+                            <li>Multiple vendor (SFA dan Core System)</li>
+                            <li>IT sebagai integrator</li>
+                            <li>Data tersebar di beberapa sistem</li>
+                        </ul>
+                    </div>
+                    <div class="status-card problem">
+                        <h4>Reality di Lapangan</h4>
+                        <ul class="content-list" style="margin-top: 0.5rem;">
+                            <li>Issue handling lambat karena dependency</li>
+                            <li>Perubahan membutuhkan koordinasi multi pihak</li>
+                            <li>Tidak ada centralized control</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="conclusion-box">
+                    <div class="conclusion-label">Impact</div>
+                    <div class="conclusion-text">System complexity <strong>meningkat seiring waktu</strong></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5 - Key Problems Identified -->
+        <section class="slide" id="slide5">
+            <span class="slide-number">05</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Masalah Utama yang Teridentifikasi</h2>
+                <div class="divider"></div>
+                <div class="problem-matrix">
+                    <div class="problem-row header">
+                        <div class="problem-cell">Area</div>
+                        <div class="problem-cell">Issue</div>
+                        <div class="problem-cell">Severity</div>
+                    </div>
+                    <div class="problem-row">
+                        <div class="problem-cell area">
+                            <span class="problem-number">01</span>
+                            Governance & Ownership
+                        </div>
+                        <div class="problem-cell">
+                            Tidak terdapat struktur ownership yang jelas end-to-end
+                        </div>
+                        <div class="problem-cell">
+                            <span class="severity-high">High</span>
+                        </div>
+                    </div>
+                    <div class="problem-row">
+                        <div class="problem-cell area">
+                            <span class="problem-number">02</span>
+                            Delivery & Execution
+                        </div>
+                        <div class="problem-cell">
+                            Timeline tidak konsisten; dependency tinggi antar pihak
+                        </div>
+                        <div class="problem-cell">
+                            <span class="severity-high">High</span>
+                        </div>
+                    </div>
+                    <div class="problem-row">
+                        <div class="problem-cell area">
+                            <span class="problem-number">03</span>
+                            Capability Gap
+                        </div>
+                        <div class="problem-cell">
+                            Tidak ada ekspertis internal untuk mendampingi user; knowledge bisnis proses belum terinternalisasi
+                        </div>
+                        <div class="problem-cell">
+                            <span class="severity-high">High</span>
+                        </div>
+                    </div>
+                    <div class="problem-row">
+                        <div class="problem-cell area">
+                            <span class="problem-number">04</span>
+                            System Flexibility
+                        </div>
+                        <div class="problem-cell">
+                            Perubahan membutuhkan effort besar; tidak adaptif terhadap kebutuhan lapangan
+                        </div>
+                        <div class="problem-cell">
+                            <span class="severity-high">High</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6 - Lesson Learned -->
+        <section class="slide" id="slide6">
+            <span class="slide-number">06</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Pelajaran yang Dipetik</h2>
+                <p class="slide-subtitle">Case Study: Project SFA 3.0 oleh IT KCSI</p>
+                <div class="insight-grid">
+                    <div class="insight-card">
+                        <div class="insight-icon">1</div>
+                        <div class="insight-body">
+                            <h4>Vendor Dependency</h4>
+                            <p>Vendor menjadi bottleneck dalam setiap perubahan dan improvement</p>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon">2</div>
+                        <div class="insight-body">
+                            <h4>Misalignment IT vs Business</h4>
+                            <p>Gap antara kebutuhan operasional dan implementasi teknis</p>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon">3</div>
+                        <div class="insight-body">
+                            <h4>Weak Project Governance</h4>
+                            <p>Tidak ada delivery framework yang konsisten</p>
+                        </div>
+                    </div>
+                    <div class="insight-card highlight">
+                        <div class="insight-icon">4</div>
+                        <div class="insight-body">
+                            <h4>Architecture Gap</h4>
+                            <p>Tidak ada desain arsitektur yang jelas, tidak ada visi jangka panjang, integrasi menjadi kompleks dan tidak scalable</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="key-takeaway">
+                    <div class="key-takeaway-label">Key Takeaway</div>
+                    <div class="key-takeaway-content">
+                        Pendekatan saat ini <strong>tidak sustainable untuk scale</strong> — diperlukan perubahan fundamental dalam cara pengembangan sistem
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7 - Strategic Direction -->
+        <section class="slide" id="slide7">
+            <span class="slide-number">07</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Arah Strategis</h2>
+                <div class="divider"></div>
+                <div class="transformation-container">
+                    <div class="transform-from">
+                        <div class="transform-header">Current State</div>
+                        <div class="transform-body">
+                            <div class="transform-item">
+                                <span class="transform-x">&times;</span>
+                                Vendor-driven system
+                            </div>
+                            <div class="transform-item">
+                                <span class="transform-x">&times;</span>
+                                Fragmented ownership
+                            </div>
+                            <div class="transform-item">
+                                <span class="transform-x">&times;</span>
+                                Reactive execution
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transform-arrow">
+                        <div class="arrow-line"></div>
+                        <div class="arrow-text">Transform</div>
+                    </div>
+                    <div class="transform-to">
+                        <div class="transform-header">Target State</div>
+                        <div class="transform-body">
+                            <div class="transform-box">
+                                <div class="transform-box-title">Internal SFA Platform</div>
+                            </div>
+                            <div class="transform-principles">
+                                <div class="principle-item">
+                                    <span class="principle-check">&check;</span>
+                                    Business-driven development
+                                </div>
+                                <div class="principle-item">
+                                    <span class="principle-check">&check;</span>
+                                    Modular & scalable architecture
+                                </div>
+                                <div class="principle-item">
+                                    <span class="principle-check">&check;</span>
+                                    Full ownership & control
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8 - Objective of Internal SFA -->
+        <section class="slide" id="slide8">
+            <span class="slide-number">08</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Tujuan SFA Internal</h2>
+                <div class="divider"></div>
+                <div class="highlight-box" style="margin-bottom: 2rem;">
+                    <h3>Tujuan Utama</h3>
+                    <p>Membangun sistem SFA yang <strong>fully aligned</strong> dengan kebutuhan bisnis dan operasional</p>
+                </div>
+                <div class="section-title">Tujuan Spesifik</div>
+                <div class="grid-4">
+                    <div class="principle-card">
+                        <div class="number">01</div>
+                        <h4>Kontrol Penuh</h4>
+                        <p>Terhadap roadmap pengembangan</p>
+                    </div>
+                    <div class="principle-card">
+                        <div class="number">02</div>
+                        <h4>Iterasi Cepat</h4>
+                        <p>Terhadap kebutuhan bisnis</p>
+                    </div>
+                    <div class="principle-card">
+                        <div class="number">03</div>
+                        <h4>Visibility</h4>
+                        <p>Terhadap operasional</p>
+                    </div>
+                    <div class="principle-card">
+                        <div class="number">04</div>
+                        <h4>Scalability</h4>
+                        <p>Jangka panjang</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9 - Scope of Development -->
+        <section class="slide" id="slide9">
+            <span class="slide-number">09</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Ruang Lingkup Pengembangan</h2>
+                <div class="divider"></div>
+                <div class="scope-diagram">
+                    <!-- Users Layer -->
+                    <div class="scope-layer users">
+                        <div class="layer-label">Users</div>
+                        <div class="layer-content users-content">
+                            <div class="user-box">Salesman</div>
+                            <div class="user-box">Supervisor</div>
+                            <div class="user-box">Admin</div>
+                            <div class="user-box">Management</div>
+                            <div class="user-box">Other Users</div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Down -->
+                    <div class="scope-arrow">&darr;</div>
+
+                    <!-- Application Layer -->
+                    <div class="scope-layer application">
+                        <div class="layer-label">Application Layer</div>
+                        <div class="layer-content">
+                            <div class="app-group">
+                                <div class="app-box primary">
+                                    <div class="app-title">SFA</div>
+                                    <div class="app-subtitle">Sales Force Automation</div>
+                                    <div class="app-modules">
+                                        <span>Taking Order</span>
+                                        <span>Marketing</span>
+                                        <span>Collection</span>
+                                        <span>Visit Plan</span>
+                                        <span>Stockist</span>
+                                    </div>
+                                </div>
+                                <div class="app-box primary">
+                                    <div class="app-title">DMS</div>
+                                    <div class="app-subtitle">Distribution Management</div>
+                                    <div class="app-modules">
+                                        <span>Inventory</span>
+                                        <span>Basic Operation</span>
+                                        <span>Supervisory App</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Down -->
+                    <div class="scope-arrow">&darr;</div>
+
+                    <!-- Data Layer -->
+                    <div class="scope-layer data">
+                        <div class="layer-label">Data Layer</div>
+                        <div class="layer-content">
+                            <div class="data-group">
+                                <div class="data-box">
+                                    <div class="data-title">Master Data</div>
+                                    <div class="data-items">
+                                        <span>Customer</span>
+                                        <span>Product</span>
+                                        <span>Pricing</span>
+                                        <span>Area</span>
+                                    </div>
+                                </div>
+                                <div class="data-box">
+                                    <div class="data-title">Report</div>
+                                    <div class="data-items">
+                                        <span>Sales Analytics</span>
+                                        <span>Dashboard</span>
+                                        <span>Export</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Down -->
+                    <div class="scope-arrow">&darr;</div>
+
+                    <!-- Integration Layer -->
+                    <div class="scope-layer integration">
+                        <div class="layer-label">Integration Layer</div>
+                        <div class="layer-content">
+                            <div class="proxy-box">
+                                <div class="proxy-title">API Gateway / Proxy Layer</div>
+                                <div class="proxy-desc">
+                                    <span>Authentication</span>
+                                    <span>Rate Limiting</span>
+                                    <span>Request Routing</span>
+                                    <span>Data Transformation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Down -->
+                    <div class="scope-arrow">&darr;</div>
+
+                    <!-- Infrastructure Layer -->
+                    <div class="scope-layer infrastructure">
+                        <div class="layer-label">Infrastructure Layer</div>
+                        <div class="layer-content">
+                            <div class="infra-group">
+                                <div class="infra-box">
+                                    <div class="infra-title">Cloud Infrastructure</div>
+                                    <div class="infra-items">
+                                        <span>Compute</span>
+                                        <span>Storage</span>
+                                        <span>Network</span>
+                                    </div>
+                                </div>
+                                <div class="infra-box">
+                                    <div class="infra-title">Database</div>
+                                    <div class="infra-items">
+                                        <span>PostgreSQL</span>
+                                        <span>Redis</span>
+                                    </div>
+                                </div>
+                                <div class="infra-box">
+                                    <div class="infra-title">Monitoring</div>
+                                    <div class="infra-items">
+                                        <span>Logging</span>
+                                        <span>Alerting</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Down -->
+                    <div class="scope-arrow">&darr;</div>
+
+                    <!-- External Systems - Existing NNA -->
+                    <div class="scope-layer external outscope">
+                        <div class="layer-label">Existing NNA <span style="opacity: 0.7; font-weight: 400;">(Out of Scope)</span></div>
+                        <div class="layer-content">
+                            <div class="external-group">
+                                <div class="external-box">Core System</div>
+                                <div class="external-box">ERP / SAP</div>
+                                <div class="external-box">Third Party APIs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10 - Development Approach -->
+        <section class="slide" id="slide10">
+            <span class="slide-number">10</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Pendekatan Pengembangan</h2>
+                <div class="divider"></div>
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-header">Metodologi</div>
+                        <ul class="content-list">
+                            <li><strong>Agile</strong> (Sprint-based)</li>
+                            <li>Iterative dan incremental</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Cara Kerja</div>
+                        <div class="flow-diagram">
+                            <span class="flow-step">Build</span>
+                            <span class="flow-arrow">&rarr;</span>
+                            <span class="flow-step" style="background: var(--color-accent);">Validate</span>
+                            <span class="flow-arrow">&rarr;</span>
+                            <span class="flow-step" style="background: var(--color-success);">Improve</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Fokus</div>
+                        <ul class="content-list">
+                            <li>Deliver value cepat</li>
+                            <li>Continuous alignment dengan bisnis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11 - Proposed Task Force Structure -->
+        <section class="slide" id="slide11">
+            <span class="slide-number">11</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Struktur Task Force yang Diusulkan</h2>
+                <div class="divider"></div>
+                <div class="highlight-box" style="margin-bottom: 2rem;">
+                    <h3>Pembentukan Task Force Product Development Team</h3>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <div class="section-title">Tujuan Utama</div>
+                        <ul class="content-list">
+                            <li>Membangun dan mengelola cloud infrastructure secara mandiri</li>
+                            <li>Memastikan development selalu align dengan kebutuhan bisnis dan steering committee</li>
+                            <li>Memberikan visibility yang transparan terhadap progress dan performance</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="section-title">Struktur Tim</div>
+                        <div class="team-structure">
+                            <div class="leadership-row">
+                                <div class="team-role lead">Product Lead</div>
+                                <div class="team-role lead accent">Business Owner<br><span class="role-sub">(Decision Authority)</span></div>
+                            </div>
+                            <div class="engineering-box">
+                                <div class="engineering-title">Engineering Team</div>
+                                <div class="engineering-grid">
+                                    <div class="eng-role lead">Tech Lead</div>
+                                    <div class="eng-role">DevOps</div>
+                                    <div class="eng-role">QA Engineering</div>
+                                    <div class="eng-role">Frontend</div>
+                                    <div class="eng-role">Backend</div>
+                                    <div class="eng-role">Production Support</div>
+                                </div>
+                            </div>
+                            <div class="team-role">QA / Support - NNA</div>
+                            <div class="team-role">IT KCSI (Support) - NNA</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="key-insight">
+                    <div class="key-insight-label">Key Principle</div>
+                    <p>Dedicated team equals focused execution</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 12 - Development Timeline -->
+        <section class="slide" id="slide12">
+            <span class="slide-number">12</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Timeline Pengembangan</h2>
+                <p class="slide-subtitle">Milestone dalam waktu 6 bulan</p>
+                <div class="milestone-container">
+                    <div class="milestone-header">
+                        <div class="milestone-month">Month 1</div>
+                        <div class="milestone-month span-5">Month 2 - 6</div>
+                    </div>
+                    <div class="milestone-body">
+                        <div class="milestone-col">
+                            <div class="milestone-card foundation">
+                                <div class="milestone-label">Milestone 1</div>
+                                <div class="milestone-title">Foundation & Setup</div>
+                                <ul class="milestone-list">
+                                    <li>Setup cloud infrastructure mandiri</li>
+                                    <li>Setup environment dan tools</li>
+                                    <li>Design system architecture</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="milestone-col wide">
+                            <div class="milestone-card development">
+                                <div class="milestone-label">Milestone 2</div>
+                                <div class="milestone-title">Core Modules Development</div>
+                                <div class="modules-grid">
+                                    <div class="module-item">
+                                        <span class="module-name">Master</span>
+                                    </div>
+                                    <div class="module-item">
+                                        <span class="module-name">Report</span>
+                                    </div>
+                                    <div class="module-item">
+                                        <span class="module-name">Basic Operation Sales</span>
+                                        <span class="module-sub">(Regular Stockist)</span>
+                                    </div>
+                                    <div class="module-item">
+                                        <span class="module-name">Marketing</span>
+                                    </div>
+                                    <div class="module-item">
+                                        <span class="module-name">Supervisory Mobile App</span>
+                                    </div>
+                                    <div class="module-item">
+                                        <span class="module-name">Taking Order</span>
+                                    </div>
+                                    <div class="module-item">
+                                        <span class="module-name">Inventory</span>
+                                    </div>
+                                    <div class="module-item highlight">
+                                        <span class="module-name">Proxy Layer</span>
+                                        <span class="module-sub">API Gateway</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 13 - Budget Structure -->
+        <section class="slide" id="slide13">
+            <span class="slide-number">13</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Struktur Anggaran</h2>
+                <div class="divider"></div>
+                <div class="budget-grid">
+                    <!-- Development Cost -->
+                    <div class="budget-card">
+                        <div class="budget-header">
+                            <div class="budget-number">1</div>
+                            <div class="budget-title">Development Cost</div>
+                        </div>
+                        <div class="budget-body">
+                            <div class="budget-desc">
+                                <p>Cost selama development dalam kurun waktu yang dibutuhkan</p>
+                                <p class="budget-note">Bergantung pada vendor yang dipilih</p>
+                            </div>
+                            <div class="budget-items">
+                                <div class="budget-row">
+                                    <span>Outsourcing Vendor</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+
+                            </div>
+                            <div class="budget-total">
+                                <span>Total Development (6 bulan)</span>
+                                <span class="budget-placeholder total">Rp ____________</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Infrastructure Cost -->
+                    <div class="budget-card">
+                        <div class="budget-header">
+                            <div class="budget-number">2</div>
+                            <div class="budget-title">Infrastructure Cost</div>
+                        </div>
+                        <div class="budget-body">
+                            <div class="budget-desc">
+                                <p>Monthly cost setelah aplikasi launching</p>
+                                <p class="budget-note">Bergantung dengan kompleksitas aplikasi</p>
+                            </div>
+                            <div class="budget-items">
+                                <div class="budget-row">
+                                    <span>Cloud Compute</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Database</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Storage</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Network & CDN</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Security</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                            </div>
+                            <div class="budget-total">
+                                <span>Total Monthly Infra</span>
+                                <span class="budget-placeholder total">Rp ______ /bulan</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tools & Software -->
+                    <div class="budget-card">
+                        <div class="budget-header">
+                            <div class="budget-number">3</div>
+                            <div class="budget-title">Tools dan Software</div>
+                        </div>
+                        <div class="budget-body">
+                            <div class="budget-desc">
+                                <p>Bergantung pada tools yang dipakai</p>
+                                <p class="budget-note">Akan align dengan infra cost</p>
+                            </div>
+                            <div class="budget-items">
+                                <div class="budget-row">
+                                    <span>CI/CD Tools</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Monitoring & Logging</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Development Tools</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Testing Tools</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                            </div>
+                            <div class="budget-total">
+                                <span>Total Tools Monthly</span>
+                                <span class="budget-placeholder total">Rp ______ /bulan</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Operational Cost -->
+                    <div class="budget-card">
+                        <div class="budget-header">
+                            <div class="budget-number">4</div>
+                            <div class="budget-title">Operational Cost</div>
+                        </div>
+                        <div class="budget-body">
+                            <div class="budget-desc">
+                                <p>Maintenance fee setelah development selesai</p>
+                                <p class="budget-note">Ongoing support dan improvement</p>
+                            </div>
+                            <div class="budget-items">
+                                <div class="budget-row">
+                                    <span>Support Team</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Bug Fixes & Updates</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Enhancement</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                                <div class="budget-row">
+                                    <span>Security Patches</span>
+                                    <span class="budget-placeholder">Rp ______ /bulan</span>
+                                </div>
+                            </div>
+                            <div class="budget-total">
+                                <span>Total Ops Monthly</span>
+                                <span class="budget-placeholder total">Rp ______ /bulan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="budget-summary">
+                    <div class="summary-item">
+                        <div class="summary-label">Total Development (One-time)</div>
+                        <div class="summary-value">Rp ____________</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Monthly Recurring</div>
+                        <div class="summary-value">Rp ______ /bulan</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 14 - Next Steps -->
+        <section class="slide" id="slide14">
+            <span class="slide-number">14</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Langkah Selanjutnya</h2>
+                <div class="divider"></div>
+                <div class="card" style="max-width: 700px; margin: 0 auto;">
+                    <div class="steps-list">
+                        <div class="step-item">
+                            <div class="step-number"></div>
+                            <div class="step-content">
+                                <h4>Penyusunan Kerangka Investasi & Anggaran</h4>
+                                <p>Menyusun estimasi kebutuhan investasi pengembangan dan alokasi sumber daya</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number"></div>
+                            <div class="step-content">
+                                <h4>Approval dari Management</h4>
+                                <p>Mendapatkan persetujuan dan dukungan dari leadership</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number"></div>
+                            <div class="step-content">
+                                <h4>Pembentukan Task Force Team</h4>
+                                <p>Menyusun tim dedicated untuk development</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number"></div>
+                            <div class="step-content">
+                                <h4>Kick-off Milestone 1 (Foundation)</h4>
+                                <p>Memulai tahap fondasi dan setup infrastructure</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number"></div>
+                            <div class="step-content">
+                                <h4>Finalisasi Roadmap dan Execution Plan</h4>
+                                <p>Menyusun rencana eksekusi yang detail</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Progress bar and slide counter
+        const slides = document.querySelectorAll('.slide');
+        const progressFill = document.getElementById('progressFill');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlides = slides.length;
+
+        function updateProgress() {
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollPercentage = (scrollPosition / (documentHeight - windowHeight)) * 100;
+
+            progressFill.style.width = scrollPercentage + '%';
+
+            // Calculate current slide
+            let currentSlide = 1;
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= windowHeight / 2) {
+                    currentSlide = index + 1;
+                }
+            });
+            currentSlideEl.textContent = currentSlide;
+        }
+
+        window.addEventListener('scroll', updateProgress);
+        updateProgress();
+    </script>
+</body>
+</html>
