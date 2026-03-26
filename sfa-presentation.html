@@ -2163,10 +2163,11 @@
                                     <div class="app-title">SFA</div>
                                     <div class="app-subtitle">Sales Force Automation</div>
                                     <div class="app-modules">
-                                        <span>Taking Order</span>
-                                        <span>Marketing</span>
-                                        <span>Collection</span>
-                                        <span>Visit Plan</span>
+                                        <span>Persiapan</span>
+                                        <span>Kunjungan</span>
+                                        <span>Callplan</span>
+                                        <span>Report</span>
+                                        <span>Reguler</span>
                                         <span>Stockist</span>
                                     </div>
                                 </div>
@@ -2194,10 +2195,22 @@
                                 <div class="data-box">
                                     <div class="data-title">Master Data</div>
                                     <div class="data-items">
-                                        <span>Customer</span>
-                                        <span>Product</span>
-                                        <span>Pricing</span>
-                                        <span>Area</span>
+                                        <span>Biaya Operasional</span>
+                                        <span>Customer Program</span>
+                                        <span>Employee & Vehicle Assignment</span>
+                                        <span>Import All Data</span>
+                                        <span>Kalendar</span>
+                                        <span>Marketing Activity</span>
+                                        <span>Marketing Program</span>
+                                        <span>Matrix Approval</span>
+                                        <span>Payment Type</span>
+                                        <span>Rute</span>
+                                        <span>Salesman Route Assignment & Adjustment</span>
+                                        <span>KSI</span>
+                                        <span>Target Volume</span>
+                                        <span>Task Creation</span>
+                                        <span>Territory Creation</span>
+                                        <span>Vehicle</span>
                                     </div>
                                 </div>
                                 <div class="data-box">
@@ -2206,6 +2219,7 @@
                                         <span>Sales Analytics</span>
                                         <span>Dashboard</span>
                                         <span>Export</span>
+                                        <span>Other Reports</span>
                                     </div>
                                 </div>
                             </div>
@@ -2395,30 +2409,23 @@
                                 <div class="milestone-title">Core Modules Development</div>
                                 <div class="modules-grid">
                                     <div class="module-item">
-                                        <span class="module-name">Master</span>
+                                        <span class="module-name">Master Data & Integration</span>
                                     </div>
                                     <div class="module-item">
-                                        <span class="module-name">Report</span>
-                                    </div>
-                                    <div class="module-item">
-                                        <span class="module-name">Basic Operation Sales</span>
-                                        <span class="module-sub">(Regular Stockist)</span>
+                                        <span class="module-name">SFA</span>
+                                        <span class="module-sub">(Regular-Stockist)</span>
                                     </div>
                                     <div class="module-item">
                                         <span class="module-name">Marketing</span>
                                     </div>
                                     <div class="module-item">
-                                        <span class="module-name">Supervisory Mobile App</span>
+                                        <span class="module-name">Supervisory</span>
                                     </div>
                                     <div class="module-item">
                                         <span class="module-name">Taking Order</span>
                                     </div>
                                     <div class="module-item">
                                         <span class="module-name">Inventory</span>
-                                    </div>
-                                    <div class="module-item highlight">
-                                        <span class="module-name">Proxy Layer</span>
-                                        <span class="module-sub">API Gateway</span>
                                     </div>
                                 </div>
                             </div>
@@ -2428,9 +2435,56 @@
             </div>
         </section>
 
-        <!-- SLIDE 13 - Budget Structure -->
+        <!-- SLIDE 13 - Siklus Pengembangan -->
         <section class="slide" id="slide13">
             <span class="slide-number">13</span>
+            <div class="slide-content">
+                <h2 class="slide-title">Siklus Pengembangan</h2>
+                <div class="divider"></div>
+                <div class="grid-3" style="gap: 1rem;">
+                    <!-- Fase 1 -->
+                    <div class="card" style="border-left: 3px solid var(--color-accent);">
+                        <div class="card-header" style="color: var(--color-accent);">Fase 1</div>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Planning & Inisiasi</div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Alignment kebutuhan, gap analysis sistem eksisting, finalisasi scope, desain arsitektur, dan penyusunan roadmap produk.</p>
+                    </div>
+                    <!-- Fase 2 -->
+                    <div class="card" style="border-left: 3px solid #1565c0;">
+                        <div class="card-header" style="color: #1565c0;">Fase 2</div>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Design</div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Pembuatan wireframe, user flow, skema database (ERD), kontrak API, dan prototipe interaktif mobile & web.</p>
+                    </div>
+                    <!-- Fase 3 -->
+                    <div class="card" style="border-left: 3px solid #2e7d32;">
+                        <div class="card-header" style="color: #2e7d32;">Fase 3</div>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Development</div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Pengembangan iteratif dengan sprint 2 minggu. Code review wajib, CI/CD terintegrasi, development & staging environment terpisah.</p>
+                    </div>
+                    <!-- Fase 4 -->
+                    <div class="card" style="border-left: 3px solid #7b1fa2;">
+                        <div class="card-header" style="color: #7b1fa2;">Fase 4</div>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">QA & UAT</div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Pengujian otomatis dan manual per sprint. UAT bersama stakeholder NNA di setiap milestone sebelum Go-Live.</p>
+                    </div>
+                    <!-- Fase 5 -->
+                    <div class="card" style="border-left: 3px solid var(--color-warning);">
+                        <div class="card-header" style="color: var(--color-warning);">Fase 5</div>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Release & Deployment</div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Deployment ke production environment dengan monitoring aktif dan rollback strategy.</p>
+                    </div>
+                    <!-- Fase 6 -->
+                    <div class="card" style="border-left: 3px solid var(--color-danger);">
+                        <div class="card-header" style="color: var(--color-danger);">Fase 6</div>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Hypercare & Support</div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-secondary);">30 hari hypercare pasca Go-Live: patch, optimasi performa, dan dukungan langsung kepada pengguna.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 14 - Budget Structure -->
+        <section class="slide" id="slide14">
+            <span class="slide-number">14</span>
             <div class="slide-content">
                 <h2 class="slide-title">Struktur Anggaran</h2>
                 <div class="divider"></div>
@@ -2586,9 +2640,9 @@
             </div>
         </section>
 
-        <!-- SLIDE 14 - Next Steps -->
-        <section class="slide" id="slide14">
-            <span class="slide-number">14</span>
+        <!-- SLIDE 15 - Next Steps -->
+        <section class="slide" id="slide15">
+            <span class="slide-number">15</span>
             <div class="slide-content">
                 <h2 class="slide-title">Langkah Selanjutnya</h2>
                 <div class="divider"></div>
